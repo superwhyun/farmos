@@ -1,0 +1,15 @@
+{
+  "db": {
+    "host": "localhost",
+    "user": "root",
+    "password": "jinong1234%",
+    "db": "welgro_now"
+  },
+  "mqtt": {
+    "host": "kist.jinong.co.kr",
+    "port": 1883,
+    "keepalive": 60,
+    "svc" : "cvtgate"
+  },
+  "sleep" : 1
+}
