@@ -22,10 +22,24 @@ FarmOS V2는 주식회사 지농에서 개발한 개방형 스마트팜 제어�
 ## 의존성
 FarmOSV2의 구동을 위해서는 다음의 환경이 필요합니다. 
 * [mysql](https://www.mysql.com)
-mysql 은 사용하는 OS에 따라 적절히 설치하면 됩니다. debian 계열의 Ubuntu나 Rasibian 등을 사용하는 경우에는 다음과 같이 설치할 수 있습니다.
+mysql 은 대표적인 오픈소스 데이터베이스 입니다. 사용하는 OS에 따라 적절히 설치하면 됩니다. debian 계열의 Ubuntu나 Rasibian 등을 사용하는 경우에는 다음과 같이 설치할 수 있습니다.
 ```
-sudo apt install mysql-server
+sudo apt install -y mysql-server
 ```
+* [mosquitto](https://mosquitto.org)
+mosquitto 는 대표적인 오픈소스 MQTT 메세지 브로커입니다. 사용하는 OS에 따라 적절히 설치하면 됩니다. debian 계열의 Ubuntu나 Rasibian 등을 사용하는 경우에는 다음과 같이 설치할 수 있습니다.
+```
+sudo apt install -y mosquitto
+```
+* [nodejs](https://nodejs.org)
+nodejs는 Chrome V8 JavaScript 엔진으로 빌드된 JavaScript 런타임입니다. [여기](https://nodejs.org/ko/download/package-manager/)에서 개별 패키지 설치방법을 확인할 수 있습니다. debian 계열의 Ubuntu 등에서는 다음과 같이 설치 가능합니다
+```
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+* 기타패키지
+위의 3가지 패키지 이외에도 다음과 같은 패키지 들이 필요합니다.
 
 ## 개발자
 
