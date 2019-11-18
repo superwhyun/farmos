@@ -1,0 +1,52 @@
+{
+	"id": "c315cb82-0f6c-4ed6-b8cc-b00331789494",
+	"name": "Sample",
+	"children": [
+		{
+			"name": "시험온실#1",
+			"id": "4157859e-df55-48e5-b3ac-8e6288f2165e",
+			"ssmate": {
+				"mod": "mate_farmos",
+				"class": "FarmosMate",
+				"opt": {
+                    "db": {
+                        "host": "localhost",
+                        "user": "farmos",
+                        "password": "farmosv2@",
+                        "db": "farmos"
+                    },
+                    "conn": {
+                        "host": "localhost",
+						"port": 1883,
+						"keepalive": 60
+					},
+					"mqtt": {
+						"svc": "cvtgate",
+						"id": "4157859e-df55-48e5-b3ac-8e6288f2165e"
+					}
+				}
+			},
+			"dsmate": {
+				"mod": "mate_ksx3267v2",
+				"class": "KSX3267MateV2",
+				"opt": {
+					"conn": [
+						{
+							"method": "rtu",
+							"port": "/dev/ttyUSB0",
+							"baudrate": 9600,
+							"timeout": 5
+						}
+					],
+					"sleep": {
+						"time": 3,
+						"obs": 19,
+						"noti": 2
+					}
+				}
+			},
+			"children": [
+			]
+		}
+	]
+}
