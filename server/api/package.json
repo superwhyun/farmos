@@ -17,7 +17,6 @@
     "express": "^4.17.1",
     "farmos.js": "file:../modules/farmos.js",
     "fcore.js": "file:../modules/fcore.js",
-    "jsonfile": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "knu.js": "file:../modules/knu.js",
     "rrw.js": "file:../modules/rrw.js",

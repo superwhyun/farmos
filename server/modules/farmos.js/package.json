@@ -11,7 +11,8 @@
   "dependencies": {
     "database.js": "file:../database.js",
     "node-ini": "^1.0.0",
-    "axios": "^0.19.0"
+    "axios": "^0.19.0",
+    "jsonfile": "^5.0.0"
   },
   "devDependencies": {
     "jasmine": "^2.5.0",
