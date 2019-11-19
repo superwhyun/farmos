@@ -5,8 +5,7 @@
  * @since 2017.07.04
  */
 
-var config = require('../../conf/config.json')
-var localcoupleFile = '../../../conf/localcouple.json'
+var localcoupleFile = '../../conf/localcouple.json'
 var codeJs = require('./code.js')
 const axios = require('axios')
 const jsonfile = require('jsonfile')
