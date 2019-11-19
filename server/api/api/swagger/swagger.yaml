@@ -1,0 +1,3159 @@
+swagger: '2.0'
+info:
+  description: 이 문서는 스마트온실 UI를 위한 API 문서입니다.
+  version: "0.3.0"
+  title: Smart Greenhouse API
+  contact:
+    email: dev.jinong@gmail.com
+host: "localhost:8081"
+basePath: /common/v1
+tags:
+  - name: farm
+    description: 농장 단위의 정보 획득
+  - name: field
+    description: 농장구역 기반의 정보 획득
+  - name: actuator
+    description: 구동기 제어 및 제어상태 관리
+  - name: devic
+    description: 장비 정보 획득a
+  - name: user
+    description: 사용자 관련
+  - name: fcore
+    description: 플랫폼 관련
+  - name: p_intro
+    description: 인트로 페이지 관련
+  - name: p_dashboard
+    description: 대시보드 페이지 관련
+  - name: p_basic
+    description: 기본정보 페이지 관련
+  - name: p_monitor
+    description: 데이터 조회 페이지 관련
+  - name: p_auto
+    description: 자동제어 페이지 관련
+  - name: p_manual
+    description: 수동제어 페이지 관련
+  - name: p_mypage
+    description: 사용자정보 페이지 관련
+  - name: p_detail
+    description: 고급설정 페이지 관련
+  - name: growthData
+    description: 생육정보
+  - name: config
+    description: 사용자 설정정보 관리
+  - name: threshhold
+    description: 임계값 정보관리 
+  - name: history
+    description: 이상값 로그관리
+  - name: observation
+    description: 현재값 조회
+  - name: app
+    description: 앱정보 관리
+  - name: status
+    description: 알람 상태 조회
+  - name: version
+    description: 알람앱 버전 관리
+  - name: rule
+    description: 룰 관리
+  - name: mashing
+    description: 막걸리 연구과제 담금정보 관리
+  - name: mms
+    description: 막걸리 연구과제 문자발송 관리
+  - name: interval
+    description: 막걸리 연구과제 DB 주기적 호출
+  - name: data
+    description: 데이터 관리
+  - name: knu_feed
+    description: 경북대 사료정보 관리 
+schemes:
+  - http
+consumes:
+  - application/octet-stream
+  - application/json
+produces:
+  - application/json  
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: authorization
+    in: header
+paths:
+  /mode:
+    x-swagger-router-controller: fcore
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - fcore
+        - p_intro
+        - p_dashboard
+        - p_basic
+        - p_monitor
+        - p_auto
+        - p_manual
+        - p_mypage
+        - p_detail
+      summary: 동작모드를 읽는다. 
+      description: 동작모드를 확인한다. 모드가 manual 이거나 auto 가 될때 까지 기다려야 한다. 최대 30초가 소요될 수 있다.
+      operationId: getMode
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/FarmosMode'
+  /devicegate:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - config
+      summary: 등록된 장비의 coupleid를 가져온다
+      description: ''
+      operationId: getDeviceGateList
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: object   
+  /gateinfo:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - config
+      summary: 게이트 정보를 읽는다. 
+      description: ''
+      operationId: getGateInfo
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GateInfo'
+  /gateinfo/detect:
+    x-swagger-router-controller: farmos
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - config
+      summary: 검색된 장비 데이터를 저장한다. 
+      description: ''
+      operationId: setGateInfoDetect
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 검색 장비 데이터
+          required: true
+          schema:
+            type: object
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GateInfo'
+  /config:
+    x-swagger-router-controller: fcore
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - fcore
+        - p_intro
+        - p_dashboard
+        - p_basic
+        - p_monitor
+        - p_auto
+        - p_manual
+        - p_mypage
+        - p_detail
+      summary: 설정을 읽는다. 
+      description: 모든 설정을 읽는다. file 인자가 주어지지 않으면 fcore.json 을 읽는다.
+      operationId: getFarmosConfig
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: file
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/FarmosConfig'
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - fcore
+        - p_detail
+      summary: 설정을 수정한다.
+      description: 'file 인자는 필수이다. 단, fcore.json 은 수정할 수 없다.'
+      operationId: setFarmosConfig
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: file
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: configuration
+          required: true
+          schema:
+            $ref: '#/definitions/FarmosConfig'
+      responses:
+        '200':
+          description: successful operation
+        '405':
+          description: Invalid input
+  /device:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - device
+      summary: 전체 장비 가져오기
+      description: ''
+      operationId: getDevices
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: object     
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - device
+      summary: 장비 추가
+      description: ''
+      operationId: addDevices
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 장비 데이터 추가
+          required: false
+          schema:
+            type: array
+            items: 
+              type: object     
+      responses:
+        '200':
+          description: successful operation
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - device
+      summary: 장비 삭제
+      description: ''
+      operationId: deleteDevice
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 장비 데이터 삭제
+          required: false
+          schema:
+            type: array
+            items: 
+              type: object     
+      responses:
+        '200':
+          description: successful operation      
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - device
+      summary: 장비 수정
+      description: ''
+      operationId: setDevice
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 장비 데이터 추가
+          required: false
+          schema:
+            type: array
+            items: 
+              type: object
+      responses:
+        '200':
+          description: successful operation                  
+  /device/node:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - device
+      summary: 노드 장비 검색
+      description: ''
+      operationId: getNodeDevices
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: couple
+          type: string
+        - in: query
+          name: gate
+          type: string
+        - in: query
+          name: node
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: object        
+  /device/manual :
+    x-swagger-router-controller: farmos
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - device
+      summary: 수동 장비 동기화
+      description: ''
+      operationId: setDeviceManual
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+  /device/history/{deviceId} :
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - device
+      summary: 구동기 상태이력을 가져온다
+      description: ''
+      operationId: getDeviceHistory
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: date
+          description: 조회 날짜
+          required: true
+          type: string
+        - name: deviceId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation           
+  '/field/{fieldId}/autocontrol':
+    x-swagger-router-controller: fcore
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - p_intro
+        - p_auto
+        - p_manual
+      summary: 자동제어와 관련된 설정을 읽는다. 
+      description: 자동제어와 관련된 종합설정을 읽는다. 0번 구역에 대한 조회는 하지 않아야 한다.
+      operationId: getFieldAutoControl
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/FieldAutoControl'
+        '405':
+          description: Invalid input
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - p_intro
+        - p_auto
+        - p_manual
+      summary: 자동제어와 관련된 설정을 수정한다.
+      description: 자동제어와 관련된 설정을 수정한다. 0번 구역에 대한 수정은 하지 않아야 한다. mode는 auto, manual, local 중 하나를 선택한다. 
+      operationId: setFieldAutoControl
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          name: body
+          description: configuration
+          required: true
+          schema:
+            $ref: '#/definitions/FieldAutoControl'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/FieldAutoControl'
+        '405':
+          description: Invalid input
+  /farm:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - farm
+      summary: 농장 상세정보를 보여준다.
+      description: ''
+      operationId: getFarm
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Farm'
+        '405':
+          description: Invalid input
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - farm
+      summary: 농장 상세정보를 추가,수정한다.
+      description: ''
+      operationId: setFarm
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description : 농장 상세 데이터
+          required: true
+          schema:
+            $ref: '#/definitions/Farm'
+      responses:
+        '200':
+          description: successful operation             
+  /farm/observation:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - farm
+        - p_intro
+        - p_dashboard
+      summary: 농장내 모든 최근 관측정보를 획득한다. 응답의 키는 정수형의 장비아이디로 여러가지 값이 있을 수 있다.
+      description: ''
+      operationId: getFarmObservation
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              112:
+                $ref: '#/definitions/Observation'
+        '405':
+          description: Invalid input
+  /farm/graph:
+    x-swagger-router-controller: fcore
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - farm
+        - p_dashboard
+        - p_auto
+        - p_basic
+        - p_detail
+        - p_monitor
+      summary: 그래프를 그리기위한 정보를 획득
+      description: 그래프 옵션으로 device_id만 입력하면 됨.
+      operationId: getFarmGraph
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description : option for graph
+          required: true
+          schema:
+            $ref: '#/definitions/GraphOption'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GraphData'
+        '405':
+          description: Invalid input
+  /farm/graph/download:
+    x-swagger-router-controller: fcore
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - farm
+        - p_monitor
+      summary: 그래프 정보를 CSV로 다운로드 받음
+      description: 그래프 옵션으로 device_id만 입력하면 됨.
+      operationId: getFarmGraphDownload
+      produces:
+        - text/csv
+      parameters:
+        - name: body
+          in: body
+          description : option for graph
+          required: true
+          schema:
+            $ref: '#/definitions/GraphOption'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: file
+        '405':
+          description: Invalid input
+  /farm/growth:
+    x-swagger-router-controller: fcore
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - farm
+      summary: 이미지를 얻어온다.
+      description: ''
+      operationId: getImage
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: string
+        '405':
+          description: Invalid input          
+  /field:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - p_dashboard
+        - p_auto
+        - p_basic
+      summary: 농장 전체 구역정보를 획득 
+      description: ''
+      operationId: getFields
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Field'
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - field
+      summary: 필드 생성
+      description: ''
+      operationId: addField
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 온실 생성 데이터
+          required: true
+          schema:
+            $ref: '#/definitions/Field'        
+      responses:
+        '200':
+          description: successful operation            
+  '/field/{fieldId}':
+    x-swagger-router-controller: farmos
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - p_dashboard
+        - p_basic
+      summary: 필드 정보의 수정
+      description: plantdate는 정식일로 날짜 포멧이어야 함. period는 정식후일수지만 저장시에는 사용되지 않음. 
+      operationId: setField
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+        - name: body
+          in: body
+          description : field Information
+          required: true
+          schema:
+            $ref: '#/definitions/Field'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '405':
+          description: Invalid input
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - field
+      summary: 필드 정보 삭제
+      description: ''
+      operationId: deleteField
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+  '/field/{fieldId}/uiDevice':
+    x-swagger-router-controller: farmos
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - field
+      summary: 필드 ui 장비 수정
+      description: ''
+      operationId: setFieldUiDevice
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64          
+        - in: body
+          name: body
+          description: 필드 ui 장비 데이터
+          required: true
+          schema:
+            $ref: '#/definitions/FieldUi'        
+      responses:
+        '200':
+          description: successful operation  
+  '/field/{fieldId}/rule':
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - rule
+      summary: 필드에 추가된 룰 리스트를 가져온다
+      description: ''
+      operationId: getRuleApplied_Field
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64   
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: object 
+    
+  '/field/{fieldId}/observation':
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - p_dashboard
+        - p_monitor
+      summary: 최근 관측정보를 획득한다.
+      description: ''
+      operationId: getFieldObservation
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Observation'
+        '400':
+          description: Invalid ID supplied
+        '405':
+          description: Invalid input
+  '/field/{fieldId}/download/{datestr}':
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - p_monitor
+      summary: 지정된 날짜의 백업파일(csv)를 다운로드한다. 날짜의 형식은 2017-11-17 과 같이 한다.
+      description: ''
+      operationId: getFieldDownload
+      produces:
+        - text/csv
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+        - name: datestr
+          in: path
+          description: date of data
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: file
+        '400':
+          description: Invalid ID supplied
+        '405':
+          description: Invalid input
+  '/field/{fieldId}/tcgraph':
+    x-swagger-router-controller: fcore
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - p_auto
+        - p_detail
+      summary: 그래프를 그리기위한 TC 정보를 획득
+      description: TC에 해당하는 device_id 를 보낸다. 동아이디 * 1000 + (524, 525, 526) 
+      operationId: getFieldTCGraph
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+        - name: body
+          in: body
+          description : option for graph
+          required: true
+          schema:
+            $ref: '#/definitions/GraphOption'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/TCGraphData'
+        '405':
+          description: Invalid input  
+  '/field/{fieldId}/tcselect/{selecttc}':
+    x-swagger-router-controller: fcore
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - p_auto
+        - p_detail
+      summary: TC 정보를 선택
+      description: 'selecttc는 1, 2, 3 중에 하나여야 하며 각각 지난 1일간, 지난2일간, 지난3일간에 해당한다.'
+      operationId: setFieldTC
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+        - name: selecttc
+          in: path
+          description : 온도보상 기준일을 선택
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+        '405':
+          description: Invalid input
+  '/field/{fieldId}/motors':
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - actuator
+        - p_manual
+      summary: 구역에 설치된 개폐기 정보 획득
+      description: position은 위치정보(%)를 의미한다. 0~100 사이의 값이 온다. direction은 방향으로 open, close, stop 중 하나가 온다.
+      operationId: getMotors 
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Motor'
+        '405':
+          description: Invalid input
+  '/field/{fieldId}/switches':
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - actuator
+        - p_manual
+      summary: 구역에 설치된 구동기 정보 획득
+      description: worktime 은 남은 작동시간이다. 0이라면 정지상태, 4095라면 계속 작동상태, 나머지 값의 경우 남은 작동시간(초)이다.
+      operationId: getSwitches 
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Switch'
+        '405':
+          description: Invalid input
+  '/field/{fieldId}/devices':
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - field
+        - p_monitor
+        - p_detail
+      summary: 구역에 설치된 장비 정보 획득
+      description: ''
+      operationId: getFieldDevices
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              112:
+                $ref: '#/definitions/Device'
+        '405':
+          description: Invalid input
+  '/field/{fieldId}/deviceproperties':
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - field 
+        - p_detail
+      summary: 구역에 설치된 장비 속성 정보 획득
+      description: ''
+      operationId: getDeviceProperties
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeviceProperty'
+        '405':
+          description: Invalid input
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - field 
+        - p_detail
+      summary: 구역에 설치된 장비 속성 정보 수정
+      description: ''
+      operationId: setDeviceProperties
+      produces:
+        - application/json
+      parameters:
+        - name: fieldId
+          in: path
+          description: ID of field to return
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          name: body
+          description: Created user object
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeviceProperty'
+      responses:
+        '200':
+          description: successful operation
+        '405':
+          description: Invalid input
+  '/actuator/{actuatorId}/status':
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - actuator
+        - p_manual
+      summary: 구동기 상태정보 획득
+      description: ''
+      operationId: getActuatorStatus 
+      produces:
+        - application/json
+      parameters:
+        - name: actuatorId
+          in: path
+          description: ID of actuator
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ActuatorStatus'
+        '405':
+          description: Invalid input
+  '/user/login':
+    x-swagger-router-controller: farmos
+    put:
+      tags:
+        - user
+        - p_mypage
+      summary: 사용자 로그인
+      description: userid 와 passwd만 채우면 된다. 다른 값들은 무시한다. 초기 일반사용자는 user/fcore 이고, 고급사용자는 admin/fcore이다. 일반사용자는 privilege가 user 이고, 고급사용자는 privilege가 admin이다. 
+      operationId: loginUser
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: The password for login in clear text
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+             $ref: '#/definitions/User'
+        '400':
+          description: Invalid userid/password supplied
+  '/user/login/refresh':
+    x-swagger-router-controller: farmos
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - user
+        - p_mypage
+      summary: 사용자 로그인 갱신
+      description: 토큰을 갱신한다
+      operationId: loginRefresh
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+             $ref: '#/definitions/User'
+        '400':
+          description: Invalid userid/password supplied
+  '/user/logout/{userid}':
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - user
+        - p_mypage
+      summary: 사용자 로그 아웃
+      description: 실제로 수행하는 로그아웃관련 행위는 없다. 그래서 아무값이나 넣어도 된다. :)
+      operationId: logoutUser
+      produces:
+        - application/json
+      parameters: 
+        - name: userid
+          in: path
+          required: true
+          type: string
+      responses:
+        default:
+          description: successful operation
+  '/user':
+    x-swagger-router-controller: fcore
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - user
+        - p_mypage
+      summary: 사용자 정보 변경
+      description: 암호를 변경하는경우는 newpasswd 라는 key를 사용하여 정보를 추가한다. userid와 passwd가 맞는경우 사용자 정보가 변경된다. 사용자권한 (privilege)는 변경할 수 없다.
+      operationId: updateUser
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Updated user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '400':
+          description: Invalid user supplied
+        '404':
+          description: User not found
+  /alarm/config/{identifier}:
+    x-swagger-router-controller: jnalarm
+    get:
+      tags: 
+      - config
+      description: 설정정보를 조회한다
+      operationId: getConfigInfo
+      produces:
+      - application/json
+      parameters:
+        - name: identifier
+          in: path
+          description: 핸드폰 번호로 중간에 하이픈이 없는 형태로 한다. (ex. 01012345678)
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success. 
+          schema:
+            $ref: '#/definitions/AlarmConfiguration'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"
+    put:
+      tags:
+      - config
+      description: 설정정보를 수정한다
+      operationId: updateConfigInfo
+      produces:
+        - application/json
+      parameters:
+        - name: identifier
+          in: path
+          description: 핸드폰 번호로 중간에 하이픈이 없는 형태로 한다. (ex. 01012345678)
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 설정정보
+          required: true
+          schema:
+              $ref: '#/definitions/AlarmConfiguration'  
+      responses:
+        "200":
+          description: success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"          
+  /alarm/threshold/{identifier}:
+    x-swagger-router-controller: jnalarm
+    get:
+      tags: 
+      - threshhold
+      description: 임계값 정보를 조회한다
+      operationId: getThresholdInfo
+      produces:
+      - application/json
+      parameters:
+        - name: identifier
+          in: path
+          description: 핸드폰 번호로 중간에 하이픈이 없는 형태로 한다. (ex. 01012345678)
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AlarmThreshold'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"
+    put:
+      tags:
+      - threshhold
+      description: 임계값 정보를 수정한다
+      operationId: updateThresholdInfo
+      produces:
+        - application/json
+      parameters:
+        - name: identifier
+          in: path
+          description: 핸드폰 번호로 중간에 하이픈이 없는 형태로 한다. (ex. 01012345678)
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 임계값 수정정보
+          required: true
+          schema:
+            $ref: '#/definitions/AlarmThreshold'
+      responses:
+        "200":
+          description: success 
+          schema:
+            type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"
+  /alarm/history/{identifier}:
+    x-swagger-router-controller: jnalarm
+    get:
+      tags: 
+      - history
+      description: 이상값 로그정보를 조회한다
+      operationId: getHistoryInfo
+      produces:
+      - application/json
+      parameters:
+        - name: identifier
+          in: path
+          description: 핸드폰 번호로 중간에 하이픈이 없는 형태로 한다. (ex. 01012345678)
+          required: true
+          type: string      
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AlarmEvent'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"
+  /alarm/observation/{identifier}:
+    x-swagger-router-controller: jnalarm
+    get:
+      tags: 
+      - observation
+      description: 현재 센서값 정보를 조회한다
+      operationId: getObservationInfo
+      produces:
+      - application/json
+      parameters:
+        - name: identifier
+          in: path
+          description: 핸드폰 번호로 중간에 하이픈이 없는 형태로 한다. (ex. 01012345678)
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AlarmObservation'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"            
+  /alarm/app/{identifier}:          
+    x-swagger-router-controller: jnalarm
+    post:
+      tags:
+        - app
+      description: 앱정보(앱버전, fcm key) 를 입력한다
+      operationId: updateAppInfo
+      produces:
+        - application/json
+      parameters:
+        - name: identifier
+          in: path
+          description: 핸드폰 번호로 중간에 하이픈이 없는 형태로 한다. (ex. 01012345678)
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 앱정보 
+          required: true
+          schema:
+              $ref: '#/definitions/AlarmAppInfo'
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "405" : 
+          description: Bad RequestMethod Not Allowed
+          schema:
+            type: string
+        "500" :
+          description: Internal Server Error
+          schema:
+            type: string
+  /alarm/version/{identifier}:            
+    x-swagger-router-controller: jnalarm         
+    get:
+      tags: 
+      - version
+      description: app 버전정보를 조회한다
+      operationId: getVersionInfo
+      produces:
+      - application/json
+      parameters:
+        - name: identifier
+          in: path
+          description: 핸드폰 번호로 중간에 하이픈이 없는 형태로 한다. (ex. 01012345678)
+          required: true
+          type: string  
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/AlarmVersion'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"                  
+  /alarm/status/{identifier}:            
+    x-swagger-router-controller: jnalarm         
+    get:
+      tags: 
+      - status
+      description: 알람정보 상태를 조회한다
+      operationId: getAlarmStatusInfo
+      produces:
+      - application/json
+      parameters:
+        - name: identifier
+          in: path
+          description: 핸드폰 번호로 중간에 하이픈이 없는 형태로 한다. (ex. 01012345678)
+          required: true
+          type: string  
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AlarmEvent'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"  
+    put:
+      tags: 
+      - status
+      description: 알람 지연시간을 설정한다. 다른것도 설정할 수 있는 형태이지만 내부적으로 지연시간만을 반영한다. delay를 빈 문자열로 하면 알람을 전송하지 않는 것으로 설정한다. 지연시간은 일회성으로 한번 지연시간이 초과하면 이후부터는 디폴트 값으로 지연된다.
+      operationId: setAlarmStatusInfo
+      produces:
+      - application/json
+      parameters:
+        - name: identifier
+          in: path
+          description: 핸드폰 번호로 중간에 하이픈이 없는 형태로 한다. (ex. 01012345678)
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: 앱정보 
+          required: true
+          schema:
+              $ref: '#/definitions/AlarmEvent'
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "405" : 
+          description: Bad RequestMethod Not Allowed
+          schema:
+            type: string
+        "500" :
+          description: Internal Server Error
+          schema:
+            type: string
+  /rule/applied:
+    x-swagger-router-controller: farmos
+    post:
+      security:
+        - Bearer: []
+      tags: 
+      - rule
+      summary: 룰을 추가한다
+      operationId: addRuleApplied
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 룰 정보
+          required: true
+          schema:
+            type: object    
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"           
+  /rule/applied/{ruleId}:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - rule
+      summary: 추가된 룰 리스트를 가져온다
+      description: ''
+      operationId: getRuleApplied_Id
+      produces:
+        - application/json
+      parameters:
+        - name: ruleId
+          in: path
+          description: 적용된 룰 아이디
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: object                     
+    put:
+      security:
+        - Bearer: []
+      tags: 
+      - rule
+      summary: 추가된 룰을 수정한다
+      operationId: setRuleApplied
+      produces:
+      - application/json
+      parameters:
+        - name: ruleId
+          in: path
+          description: 적용된 룰 아이디
+          required: true
+          type: integer
+        - in: body
+          name: rule
+          description: 룰 정보
+          required: true
+          schema:
+            type: object
+      responses:
+        '200':
+          description: successful operation  
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - rule
+      summary: 적용된 룰 삭제
+      description: ''
+      operationId: deleteAppliedRule
+      produces:
+        - application/json
+      parameters:
+        - name: ruleId
+          in: path
+          description: 적용된 룰 아이디
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation      
+  /rule/template:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - rule
+      summary: 룰 템플릿 리스트를 가져온다
+      description: ''
+      operationId: getRuleTemplate
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: object
+    post:
+      tags: 
+      - rule
+      summary: 룰 팀플릿 추가
+      operationId: addRuleTemplate
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 룰 템플릿
+          required: true
+          schema:
+            type: object
+      responses:
+        '200':
+          description: successful operation    
+  /rule/template/{ruleId}:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - rule
+      summary: 룰 템플릿 리스트를 가져온다
+      description: ''
+      operationId: getRuleTemplateDetail
+      produces:
+        - application/json
+      parameters:
+        - name: ruleId
+          in: path
+          description: 룰 아이디
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: object      
+    put:
+      tags: 
+      - rule
+      summary: 룰 팀플릿 수정
+      operationId: setRuleTemplateDetail
+      produces:
+      - application/json
+      parameters:
+        - name: ruleId
+          in: path
+          description: 룰 아이디
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: 룰 템플릿
+          required: true
+          schema:
+            type: object
+      responses:
+        '200':
+          description: successful operation       
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - rule
+      summary: 룰 템플릿 삭제
+      description: ''
+      operationId: deleteRuleTemplateDetail
+      produces:
+        - application/json
+      parameters:
+        - name: ruleId
+          in: path
+          description: 룰 아이디
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation    
+  
+  /rule/timespan/{timespanId}:
+    x-swagger-router-controller: farmos
+    put:
+      tags: 
+      - rule
+      summary: 공통 타임스팬 템플릿을 수정한다
+      operationId: setTimespan
+      produces:
+      - application/json
+      parameters:
+        - name: timespanId
+          in: path
+          description: 아이디
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: 타임스팬
+          required: true
+          schema:
+            type: object
+      responses:
+        '200':
+          description: successful operation       
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - rule
+      summary: 공통 타임스팬 템플릿을 삭제한다
+      description: ''
+      operationId: delTimespan
+      produces:
+        - application/json
+      parameters:
+        - name: timespanId
+          in: path
+          description: 아이디
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation  
+
+  /rule/timespan/{timespanId}/field/{fieldId}:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - rule
+      summary: 필드에 속한 타임스판 아이템을 가져온다
+      description: ''
+      operationId: getTimespanFieldItem
+      produces:
+        - application/json
+      parameters:
+        - name: timespanId
+          in: path
+          description: 아이디
+          required: true
+          type: integer
+        - name: fieldId
+          in: path
+          description: 아이디
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: object 
+    
+  /rule/timespan:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - rule
+      summary: 타임스팬 리스트를 가져온다
+      description: ''
+      operationId: getTimespan
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: object       
+    post:
+      tags: 
+      - rule
+      description: 타임스팬 추가
+      operationId: addTimespan
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 타임스팬
+          required: true
+          schema:
+            type: object
+      responses:
+        '200':
+          description: successful operation    
+  /dataindex:
+    x-swagger-router-controller: farmos
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - data
+      summary: 데이터인덱스 리스트를 가져온다
+      description: ''
+      operationId: getDataIndexes
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items: 
+              type: object
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - data
+      description: 데이터인덱스를 수정한다
+      operationId: setDataIndexes
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 데이터인덱스
+          required: true
+          schema:
+            type: array
+            items: 
+              type: object
+      responses:
+        '200':
+          description: successful operation       
+  /mashing:            
+    x-swagger-router-controller: rrw         
+    get:
+      tags: 
+      - mashing
+      description: 막걸리 전체 담금 보고서 기본정보를 조회한다
+      operationId: getAllMashingInfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MashingList'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"
+    post:
+      tags: 
+      - mashing
+      description: 막걸리 담금 보고서 기본정보를 저장한다
+      operationId: setMashingBasicInfo
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 담금보고서 기본정보 
+          required: true
+          schema:
+            $ref: '#/definitions/mashingBasicInfo'      
+      responses:
+        '200':
+          description: successful operation          
+  /mashing/setting:                        
+    x-swagger-router-controller: rrw         
+    get:
+      tags: 
+      - mashing
+      description: 막걸리  제어셋팅 정보 가져오기 
+      operationId: getMashingSetting
+      produces:
+      - application/json
+      parameters:
+        - name: id
+          in: query
+          description: 아이디(담금, 탱크)
+          required: true
+          type: string
+        - name: gubun
+          in: query
+          description: 구분(고급, 기본)
+          required: true
+          type: string  
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MashingSettingInfo'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"
+    put:
+      tags: 
+      - mashing
+      description: 막걸리 제어셋팅 정보 수정
+      operationId: setMashingSetting
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 담금보고서 기본정보 
+          required: true
+          schema:
+            $ref: '#/definitions/MashingSettingValue'      
+      responses:
+        '200':
+          description: successful operation                      
+  /mashing/current_observation:                        
+    x-swagger-router-controller: rrw         
+    get:
+      tags: 
+      - mashing
+      description: 막걸리 담금데이터 최근값 가져오기
+      operationId: getMashingCurrentObservation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ObservationList'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"
+  '/mashing/{mashing_id}':            
+    x-swagger-router-controller: rrw         
+    get:
+      tags: 
+      - mashing
+      description: 막걸리 개별 담금 보고서 정보를 조회한다
+      operationId: getMashingInfo
+      produces:
+      - application/json
+      parameters:
+        - name: mashing_id
+          in: path
+          description: 담금 보고서 아이디
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MashingInfo'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "405" : 
+          description: Bad RequestMethod Not Allowed
+          schema:
+            type: string
+        "500" :
+          description: Internal Server Error
+          schema:
+            type: string
+    put:            
+      tags: 
+      - mashing
+      description: 막걸리 개별 담금 보고서 정보를 수정한다
+      operationId: setMashingInfo
+      produces:
+      - application/json
+      parameters:
+        - name: mashing_id
+          in: path
+          description: 담금 보고서 아이디
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: 담금보고서 저장 정보
+          required: true
+          schema:
+            $ref: '#/definitions/MashingSetInfo'      
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "405" : 
+          description: Bad RequestMethod Not Allowed
+          schema:
+            type: string
+        "500" :
+          description: Internal Server Error
+          schema:
+            type: string
+    delete:            
+      tags: 
+      - mashing
+      description: 막걸리 개별 담금 보고서 정보를 삭제한다
+      operationId: deleteMashingInfo
+      produces:
+      - application/json
+      parameters:
+        - name: mashing_id
+          in: path
+          description: 담금 보고서 아이디
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: 담금보고서 기본정보 
+          required: true
+          schema:
+            $ref: '#/definitions/mashingDeleteInfo'        
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "405" : 
+          description: Bad RequestMethod Not Allowed
+          schema:
+            type: string
+        "500" :
+          description: Internal Server Error
+          schema:
+            type: string
+  '/mashing/{mashing_id}/chart':            
+    x-swagger-router-controller: rrw         
+    get:
+      tags: 
+      - mashing
+      description: 막걸리 개별 담금 보고서 차트정보를 조회한다
+      operationId: getMashingChartInfo
+      produces:
+      - application/json
+      parameters:
+        - name: mashing_id
+          in: path
+          description: 담금 보고서 아이디
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MashingchartObj'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"
+  '/mashing/{mashing_id}/dashboardchart':            
+    x-swagger-router-controller: rrw         
+    get:
+      tags: 
+      - mashing
+      description: 막걸리 개별 담금 보고서 차트정보를 조회한다
+      operationId: getMashingDashboardChartInfo
+      produces:
+      - application/json
+      parameters:
+        - name: mashing_id
+          in: path
+          description: 담금 보고서 아이디
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MashingDashboardchartObj'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error" 
+  /mms:            
+    x-swagger-router-controller: rrw         
+    get:
+      tags: 
+      - mms
+      description: 막걸리 이상 발생 내역 수신자 정보를 조회한다
+      operationId: getMMSInfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MMSinfoList'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"
+    put:            
+      tags: 
+      - mms
+      description: 막걸리 이상 발생 내역 수신자 정보를 수정한다
+      operationId: updateMMSInfo
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 막걸리 이상알림 수신자 정보 
+          required: true
+          schema:
+            $ref: '#/definitions/MMSinfo'      
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "405" : 
+          description: Bad RequestMethod Not Allowed
+          schema:
+            type: string
+        "500" :
+          description: Internal Server Error
+          schema:
+            type: string
+    post:            
+      tags: 
+      - mms
+      description: 막걸리 이상 발생 내역 수신자 정보를 저장한다
+      operationId: setMMSInfo
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 막걸리 이상알림 수신자 정보 
+          required: true
+          schema:
+            $ref: '#/definitions/MMSinfo'      
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "405" : 
+          description: Bad RequestMethod Not Allowed
+          schema:
+            type: string
+        "500" :
+          description: Internal Server Error
+          schema:
+            type: string
+    delete:            
+      tags: 
+      - mms
+      description: 막걸리 이상 발생 내역 수신자 정보를 삭제한다
+      operationId: deleteMMSInfo
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 막걸리 이상알림 수신자 정보 
+          required: true
+          schema:
+            $ref: '#/definitions/MMSinfo'      
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "405" : 
+          description: Bad RequestMethod Not Allowed
+          schema:
+            type: string
+        "500" :
+          description: Internal Server Error
+          schema:
+            type: string
+  /mms/list/{company}:            
+    x-swagger-router-controller: rrw         
+    get:            
+      tags: 
+      - mms
+      description: 막걸리 이상내역 리스트를 가져온다 
+      operationId: getMMSAlarmList      
+      parameters:
+        - name: company
+          in: path
+          description: 회사구분
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MMSvalueList'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"
+  /interval:            
+    x-swagger-router-controller: rrw         
+    get:
+      tags: 
+      - interval
+      description: 막걸리 전체 담금 보고서 기본정보를 조회한다
+      operationId: gertInterval
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items: 
+              type: object     
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error"            
+  /feed/observation:
+    x-swagger-router-controller: knu
+    get:
+      tags:
+        - knu_feed
+      description: 경북대 사료정보(수분, ph) 데이터를 가져온다
+      operationId: getKnuObservations
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/KnuChartObj'
+  /feed/current/observation:
+    x-swagger-router-controller: knu
+    get:
+      tags:
+        - knu_feed
+      description: 경북대 사료정보(수분, ph) 최근 데이터를 가져온다
+      operationId: getKnuCurrentObservations
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/KnuChartObj'
+  /feed/download:
+    x-swagger-router-controller: knu
+    get:
+      tags:
+        - knu_feed
+      description: 경북대 사료정보(수분, ph) 다운로드
+      operationId: getKnuDownload
+      produces:
+        - text/csv
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: file
+        '405':
+          description: Invalid input
+definitions:
+  Observation:
+    type: object
+    properties:
+      name:
+        type: string
+        example: 외부습도
+      unit:
+        type: string
+        example: '%'
+      value:
+        type: string
+        example: 30
+      obstimes:
+        type: string
+        format: date-time
+        example: '2017-07-19 23:00:00'
+    xml:
+      name: Observation
+  GraphOption:
+    type: object
+    required : [device_id]
+    properties:
+      device_id:
+        type: array
+        items: 
+          type: integer
+        example: [111,211]
+      startdate:
+        type: string
+        example: '2017-09-05 00:00:00'
+      enddate:
+        type: string
+        example: '2017-09-05 23:00:00'
+      extra:
+        type: object
+        properties:
+          condensation:
+            type: integer
+            example: 2013
+          CAI:
+            type: string
+            example: 'crop-activity-index-1.json'
+  TCGraphData:
+    type: object
+    properties:
+      selectedtc:
+        type: integer
+        example: 1
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GraphPointSet'
+  GraphData:
+    type: object
+    required: [data]
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GraphPointSet'
+      extra:
+        type: object
+        properties:
+          condensation:
+            type: array
+            items:
+              $ref: '#/definitions/GraphPoint'
+          CAI:
+            type: array
+            items:
+              $ref: '#/definitions/GraphPoint'
+  GraphPoint:
+    type: object
+    properties:
+      time:
+        type: string
+        example: 1440
+      value:
+        type: number
+        example: 32.1
+  GraphPointSet:
+    type: object
+    properties:
+      device_id:
+        type: integer
+        example: 112
+      name:
+        type: string
+        example: 습도
+      unit:
+        type: string
+        example: '%'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GraphPoint'
+    xml:
+      name: GraphPointSet
+  Field:
+    type: object
+    required: [name]
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: Greenhouse#1
+      fields:
+        type: string
+        enum: [local, greenhouse]
+      crop:
+        type: string
+        example: 토마토
+      plantDate:
+        type: string
+        format: date-time
+      period:
+        type: integer
+      longitude:
+        type: number
+        example: 128.85
+      latitude:
+        type: number
+        example: 37.79
+      direction:
+        type: string
+        example: 동쪽
+      comment:
+        type: string
+        example: 비고
+      ui_device:
+        type: object
+        example: "{}"
+    xml:
+      name: Field
+  FieldUi:
+      type: object
+      required: [path]
+      properties:
+        path:
+          type: array
+          items:
+           type: string
+          example: ['index','local']
+        devices:
+          type: object
+          example: {279: [10027901]}
+        datas:
+          type: array
+          items:
+           type: number
+          example: [10000210]
+      xml:
+        name: Field      
+  Device:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      devtype:
+        type: string
+        enum:
+          - sensor
+          - vsensor
+          - isensor
+          - actuator
+      subtype:
+        type: string
+      name:
+        type: string
+        example: 측창A
+      unit:
+        type: string
+        example: '%'
+    xml:
+      name: Device
+  DeviceProperty:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      propkey:
+        type: string
+        example: opentime
+      propvalue:
+        type: string
+        example: 3000
+    xml:
+      name: DeviceProperty
+  Motor:
+    type: object
+    properties:
+      device_id:
+        type: integer
+        format: int64
+      position:
+        type: number
+      direction:
+        type: string
+        enum:
+          - stop
+          - open
+          - close
+      target:
+        type: number
+      opentime:
+        type: integer
+      closetime:
+        type: integer
+      name:
+        type: string
+        example: 측창A
+  Switch:
+    type: object
+    properties:
+      device_id:
+        type: integer
+        format: int64
+      worktime:
+        type: integer
+      name:
+        type: string
+        example: 환기팬
+    xml:
+      name: Actuator
+  ActuatorStatus:
+    type: object
+    properties:
+      ctrlid:
+        type: integer
+        format: int64
+      argument:
+        type: integer
+        format: int64
+      worktime:
+        type: integer
+        format: int64
+      status:
+        type: integer
+      statusstr:
+        type: string
+      number:
+        type: integer
+        format: int64
+    xml:
+      name: ActuatorStatus
+  User:
+    type: object
+    properties:
+      userid:
+        type: string
+        example: user
+      firstname:
+        type: string
+      lastname:
+        type: string
+      email:
+        type: string
+      passwd:
+        type: string
+        example: fcore
+      phone:
+        type: string
+      privilege:
+        type: string
+        description: User Status
+        enum: 
+          - admin
+          - user
+    xml:
+      name: user
+  FarmosConfig:
+    type: object
+    xml:
+      name: config
+  FarmosMode:
+    type: object
+    properties:
+      mode:
+        type: string
+        enum: ["manual", "to manual", "to auto", "auto", "reload then manual", "reload then auto","initialize then manual", "initialize then auto"]
+  FieldAutoControl:
+    type: object
+    properties:
+      mode:
+        type: string
+        enum: [auto, manual, local]
+      ventilationload:
+        $ref: '#/definitions/AutoControlItem'
+      heatload:
+        $ref: '#/definitions/AutoControlItem'
+      condensation:
+        $ref: '#/definitions/AutoControlItem'
+      badweather:
+        $ref: '#/definitions/AutoControlItem'
+      CAI:
+        $ref: '#/definitions/AutoControlItem'
+    xml:
+      name: config
+  AutoControlItem:
+    type: object
+    properties:
+      use: 
+        type: boolean
+      option:
+        type: object
+  AlarmThreshold:
+    type: object
+    properties:
+      'pname':
+        type: string
+      'used':
+        type: boolean
+      'thresholds':
+        type: array
+        items:
+          $ref: '#/definitions/AlarmOneThreshold'
+  AlarmOneThreshold:
+    type: object
+    properties:
+      name:
+        type: string
+      value:
+        type: number
+  AlarmObservation:
+    type: object
+    properties:
+      name:
+        type: string
+      unit:
+        type: string
+      value:
+        type: number
+      obstime:
+        type: string
+      isgood:
+        type: boolean
+  AlarmEvent:
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+      occured:
+        type: string
+      updated:
+        type: string
+      severity:
+        type: number
+  AlarmConfiguration:
+    type: object
+    properties:
+      defdelay:
+        type: integer
+        example: 10
+        description: 분단위. 디폴트 지연시간.
+      method:
+        type: string
+        example: 'V'
+        description: V:진동 N:사용안함 R:소리 M:문자메세지 K:소리/진동
+  AlarmAppInfo:
+    type: object
+    properties:
+      appversion:
+        type: string
+        example: '0.1'
+      fcmkey:
+        type: string
+        example: 'fuevENfVbwY:APA91bFBz_AB2lkr940n6kIYnkzEqqjs4eyJKtCy0AFK67m0X3K9v46ekUagEb'
+  AlarmVersion:        
+    type: object
+    properties:
+      newest_app_version:
+        type: string
+        example: '0.3'
+      minimum_support_app_version:
+        type: string
+        example: '0.2'
+  MashingList:        
+    type: array
+    items:
+      $ref: '#/definitions/MashingListInfo'  
+  MashingListInfo:
+    type: object
+    properties:
+      mashing_id:
+        type: integer
+        example: 1
+      start_dt:
+        type: string
+        example: '2019-12-01'
+      end_dt:
+        type: string
+        example: '2019-12-08'
+      name:
+        type: string
+        example: '1번발효실_2019-12-01_report'  
+      gubun :   
+        type: string
+        example: '우리술'  
+  mashingBasicInfo:
+    type: object
+    properties:
+      mashing_id:
+        type: integer
+        example: 1
+      start_dt:
+        type: string
+        example: '2019-12-01'
+      end_dt:
+        type: string
+        example: '2019-12-08'
+      second_dt:
+        type: string
+        example: '2019-12-04'  
+      name:
+        type: string
+        example: '1번발효실_2019-12-01_report'     
+      tank_list:
+        type: array
+        items:
+          $ref: '#/definitions/tankInfo'
+  mashingDeleteInfo:
+    type: object
+    properties:
+      mashing_id:
+        type: integer
+        example: 1
+      start_dt:
+        type: string
+        example: '2019-12-01'
+      end_dt:
+        type: string
+        example: '2019-12-08'
+      name:
+        type: string
+        example: '1번발효실_2019-12-01_report'     
+      tank_list:
+        type: array
+        items:
+          $ref: '#/definitions/tankInfo'                           
+      company:
+        type: string
+        example: '0'         
+  MashingInfo:
+    type: object
+    properties:
+      mashing_id:
+        type: integer
+        example: 1
+      start_dt:
+        type: string
+        example: '2019-12-01'
+      end_dt:
+        type: string
+        example: '2019-12-08'
+      step_day:
+        type: string
+        example: '1'  
+      name:
+        type: string
+        example: '1번발효실_2019-12-01_report'   
+      tank_list:
+        type: array
+        items:
+          $ref: '#/definitions/tankInfo'         
+      moring_temp_list:
+        type: array
+        items:
+          $ref: '#/definitions/moringTempInfo'
+      afternoon_temp_list:
+        type: array
+        items:
+          $ref: '#/definitions/afternoonTempInfo'    
+      water_temp_list:
+        type: array
+        items:
+          $ref: '#/definitions/waterTempInfo'
+      element_list:
+        type: object
+        properties:
+          manual_temp_list:
+            type: array
+            items:
+              $ref: '#/definitions/manualTempInfo'
+          aci_list:
+            type: array
+            items:
+              $ref: '#/definitions/aciInfo'
+          alc_list:
+            type: array
+            items:
+              $ref: '#/definitions/alcInfo'
+          brix_list:
+            type: array
+            items:
+              $ref: '#/definitions/brixInfo' 
+      input_list:
+        type: array
+        items:
+          $ref: '#/definitions/inputInfo'               
+  tankInfo:
+    type: object
+    properties:
+      tank_id:
+        type: integer
+        example: 1
+      tank_name:
+        type: string
+        example: '1-1 담금조'
+      rice:
+        type: string
+        example: '2'
+  moringTempInfo:
+    type: object
+    properties:      
+      measure_dt:
+        type: string
+        example: '2019-12-01 09:00'
+      value:
+        type: string
+        example: '20.23'
+      code:
+        type: string
+        example: '401000001'
+  afternoonTempInfo:
+    type: object
+    properties:      
+      measure_dt:
+        type: string
+        example: '2019-12-01 15:00'
+      value:
+        type: string
+        example: '23.46'
+      code:
+        type: string
+        example: '401000002'        
+  waterTempInfo:
+    type: object
+    properties:
+      tank_id:
+        type: integer
+        example: 1
+      measure_dt:
+        type: string
+        example: '2019-12-01 00:00'
+      value:
+        type: string
+        example: '10.23'
+      code:
+        type: string
+        example: '001004'
+  manualTempInfo:        
+    type: object
+    properties:
+      tank_id:
+        type: integer
+        example: 1
+      measure_dt:
+        type: string
+        example: '2019-12-01 00:00'
+      value:
+        type: string
+        example: '13.23'
+      code:
+        type: string
+        example: '001003'
+  aciInfo:        
+    type: object
+    properties:
+      tank_id:
+        type: integer
+        example: 1
+      measure_dt:
+        type: string
+        example: '2019-12-01 00:00'
+      value:
+        type: string
+        example: '16.23'
+      code:
+        type: string
+        example: '001006'        
+  alcInfo:        
+    type: object
+    properties:
+      tank_id:
+        type: integer
+        example: 1
+      measure_dt:
+        type: string
+        example: '2019-12-01 00:00'
+      value:
+        type: string
+        example: '18.23'
+      code:
+        type: string
+        example: '001007'                
+  brixInfo:        
+    type: object
+    properties:
+      tank_id:
+        type: integer
+        example: 1
+      measure_dt:
+        type: string
+        example: '2019-12-01 00:00'
+      value:
+        type: string
+        example: '21.23'
+      code:
+        type: string
+        example: '001008'               
+  inputInfo:
+    type: object
+    properties:
+      input_id:
+        type: integer
+        example: 1
+      input_name:
+        type: string
+        example: '조은'
+      make_dt:
+        type: string
+        example: '2019-12-01'
+      amount_value:
+        type: string
+        example: '20.23'
+      titer_value:
+        type: string
+        example: '20.23'
+      aci_value:
+        type: string
+        example: '20.23'
+      moisture_value:
+        type: string
+        example: '20.23'
+  MashingchartObj :
+    type: object
+    properties:
+      mashing_id:
+        type: integer
+        example: 1
+      start_dt:
+        type: string
+        example: '2019-12-01'
+      end_dt:
+        type: string
+        example: '2019-12-08'
+      name:
+        type: string
+        example: '1번발효실_2019-12-01_report'   
+      tank_list:
+        type: array
+        items:
+          $ref: '#/definitions/tankInfo'         
+      temp_list:
+        type: array
+        items:
+          $ref: '#/definitions/MashingchartInfo'
+  MashingDashboardchartObj :
+    type: object
+    properties:
+      mashing_id:
+        type: integer
+        example: 1
+      start_dt:
+        type: string
+        example: '2019-12-01'
+      end_dt:
+        type: string
+        example: '2019-12-08'
+      name:
+        type: string
+        example: '1번발효실_2019-12-01_report'   
+      tank_list:
+        type: array
+        items:
+          $ref: '#/definitions/tankInfo'         
+      temp_list:
+        type: array
+        items:
+          $ref: '#/definitions/MashingchartInfo'
+      alchole_list:
+        type: array
+        items:
+          $ref: '#/definitions/MashingchartInfo'
+      ph_list:
+        type: array
+        items:
+          $ref: '#/definitions/MashingchartInfo'                        
+  MashingchartInfo:
+    type: object
+    properties:
+      mashing_id:
+        type: integer
+        example: 1
+      tank_id:
+        type: integer
+        example: 1
+      tank_name:
+        type: string
+        example: '1-1 담금조'
+      rice:
+        type: string
+        example: '1'
+      measure_dt:
+        type: string
+        example: '2019-12-01 00:00'
+      value:
+        type: number
+        format: double
+        example: 20.23
+      code:
+        type: string
+        example: '001000'     
+  MashingSettingInfo:        
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      name:
+        type: string
+        example: '1번탱크룰'
+      updated:
+        type: string
+        example: '2019-07-01'
+      field_id:
+        type: integer
+        example: 1
+      used:
+        type: integer
+        example: 1
+      constraints:
+        type: string
+        example: ''
+      configuration:
+        type: string
+        example: ''
+      inputs:
+        type: string
+        example: ''
+      controllers:
+        type: string
+        example: ''
+  MashingSettingValue:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      controlTemp1:
+        type: number
+        example: 1
+      alarmTemp1:
+        type: number
+        example: 1  
+      controlTemp2:
+        type: number
+        example: 1
+      alarmTemp2:
+        type: number
+        example: 1    
+      controAlchole1:
+        type: number
+        example: 1
+      controCool1:
+        type: number
+        example: 1
+      controAlchole2:
+        type: number
+        example: 1
+      controCool2:
+        type: number
+        example: 1
+      controAlchole3:
+        type: number
+        example: 1
+      controlHour1:
+        type: integer
+        example: 1
+      controlMinute1:
+        type: integer
+        example: 1
+      controlHour2:
+        type: integer
+        example: 1
+      controlMinute2:
+        type: integer
+        example: 1
+      gubun:
+        type: integer
+        example: 1
+  ObservationList:
+    type: array
+    items:
+      $ref: '#/definitions/ObservationInfo'  
+  ObservationInfo:
+    type: object
+    properties:
+      data_id:
+        type: string
+        example: '10001201'
+      obs_time:
+        type: string
+        example: '2019-07-11'
+      nvalue:
+        type: string
+        example: '20.21'
+  MashingSetInfo:
+    type: object
+    properties:
+      moring_temp_list:
+        type: array
+        items:
+          $ref: '#/definitions/moringTempInfo'
+      afternoon_temp_list:
+        type: array
+        items:
+          $ref: '#/definitions/afternoonTempInfo'    
+      water_temp_list:
+        type: array
+        items:
+          $ref: '#/definitions/waterTempInfo'
+      element_list:
+        type: object
+        properties:
+          manual_temp_list:
+            type: array
+            items:
+              $ref: '#/definitions/manualTempInfo'
+          aci_list:
+            type: array
+            items:
+              $ref: '#/definitions/aciInfo'
+          alc_list:
+            type: array
+            items:
+              $ref: '#/definitions/alcInfo'
+          brix_list:
+            type: array
+            items:
+              $ref: '#/definitions/brixInfo' 
+      input_list:
+        type: array
+        items:
+          $ref: '#/definitions/inputInfo'     
+  MMSinfoList:
+    type: array
+    items:
+      $ref: '#/definitions/MMSinfo'            
+  MMSinfo:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      name:
+        type: string
+        example: '홍길동'
+      phone_number:
+        type: string
+        example: '010-1234-1234'
+      used:
+        type: string
+        example: 'Y'
+      memo:
+        type: string
+        example: '테스트'  
+      company_gubun:
+        type: string
+        example: '1'
+  MMSvalueList:
+    type: array
+    items:
+      $ref: '#/definitions/MMSvalue'            
+  MMSvalue:
+    type: object
+    properties:
+      obs_time:
+        type: string
+        example: '2019-01-01'
+      data_id:
+        type: integer
+        example: '1'
+      nvalue:
+        type: number
+        example: '22.1'
+  KnuChartObj :
+    type: object
+    properties:
+      humidityChart:
+        type: array
+        items:
+          $ref: '#/definitions/MashingchartInfo'
+      pHChart:
+        type: array
+        items:
+          $ref: '#/definitions/MashingchartInfo'        
+  Farm:        
+    type: object
+    required:
+      - name
+      - info
+    properties:
+      id:
+        type: integer
+        example: 1
+      name:
+        type: string
+        example: '시설원예'
+      info:
+        type: object
+        example: '{}'        
+  GateInfo:        
+    type: object
+    properties:
+      uuid:
+        type: string
+        example: '23i12hrkj23hkrjhkj23r23r'
+      couple:
+        type: string
+        example: '23oir5ujo2l3jtklwjtlk3t'                                          
+  error:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: 'false'

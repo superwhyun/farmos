@@ -1,0 +1,39 @@
+{
+  "name": "farmos-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Farmos API Project",
+  "keywords": [
+    "farmos",
+    "jinong"
+  ],
+  "author": "JiNong Inc.",
+  "license": "Commercial",
+  "main": "app.js",
+  "dependencies": {
+    "connect-history-api-fallback": "^1.6.0",
+    "cors": "^2.8.5",
+    "database.js": "file:../modules/database.js",
+    "express": "^4.17.1",
+    "farmos.js": "file:../modules/farmos.js",
+    "fcore.js": "file:../modules/fcore.js",
+    "jsonfile": "^5.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "knu.js": "file:../modules/knu.js",
+    "rrw.js": "file:../modules/rrw.js",
+    "swagger-node-runner": "^0.7.3",
+    "swagger-ui-express": "4.0.7",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "nodemon": "1.19.1"
+  },
+  "scripts": {
+    "serve": "nodemon --inspect app.js -e js,yaml,json",
+    "start": "node app.js",
+    "sstart": "swagger project start",
+    "sedit": "swagger project edit",
+    "dev": "swagger project edit & swagger project start"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "configuration": {
+    "api": {
+      "port": 80
+    }
+  },
+  "timespan": [
+    {
+      "id": "timespan-1",
+      "file": "timespan/timespan-1.json"
+    }
+  ],
+  "interfaces": [
+    {
+      "type": "none",
+      "id": "intro",
+      "url": "/intro",
+      "name": "국립원예특작과학원 시설원예연구소 스마트온실",
+      "files": ["ui/intro.json"]
+    },
+    {
+      "url": "/dashboard",
+      "id": "dashboard",
+      "name": "대시보드",
+      "files": ["ui/dashboard-1.json"],
+      "option": {
+        "type": "slide",
+        "interval": 10
+      }
+    },
+    {
+      "type": "title",
+      "name": "PLACE"
+    },
+    {
+      "children": [
+        {
+          "id": "1",
+          "url": "/intro",
+          "children": [
+            {
+              "url": "/monitor/1",
+              "id": "monitor",
+              "name": "데이터 조회",
+              "files": ["ui/monitor-1.json"]
+            },
+            {
+              "url": "/manual-control/1",
+              "id": "manual-control",
+              "name": "수동제어",
+              "files": ["ui/manual-control-1.json"]
+            },
+            {
+              "url": "/hydroponics/1",
+              "id": "hydroponics",
+              "name": "양액기",
+              "files": ["ui/hydroponics-1.json"]
+            },
+            {
+              "url": "/growth/1",
+              "id": "growth",
+              "name": "생육정보",
+              "files": ["ui/growth-1.json"]
+            },
+            {
+              "url": "/cctv/1",
+              "id": "cctv",
+              "name": "CCTV",
+              "files": ["ui/cctv-1.json"]
+            },
+            {
+              "url": "/alarm/1",
+              "id": "alarm",
+              "name": "알람 데이터",
+              "files": ["ui/alarm-1.json"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

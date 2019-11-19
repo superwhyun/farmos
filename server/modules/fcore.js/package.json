@@ -1,0 +1,30 @@
+{
+  "name": "fcore_api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "fcore.js",
+  "description": "fcore access api",
+  "scripts": {
+    "test": "jasmine",
+    "doc": "jsdoc -c jsdoc.json package.json"
+  },
+  "dependencies": {
+
+    "database.js": "file:../database.js",
+    "jsonfile": "^2.4.0",
+    "jsonpath": "^1.0.2"
+  },
+  "devDependencies": {
+    "jasmine": "^2.5.0",
+    "jasmine-core": "^2.5.0",
+    "jsdoc": "^3.4.0",
+    "jslint": "^0.10.3"
+  },
+  "keywords": [
+    "farmos",
+    "fcore",
+    "jinong"
+  ],
+  "author": "JoonYong (joonyong.jinong@gmail.com)",
+  "license": "Commercial"
+}

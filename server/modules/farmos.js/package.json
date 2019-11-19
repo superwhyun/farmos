@@ -1,0 +1,28 @@
+{
+  "name": "farmos_api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "farmos.js",
+  "description": "Farmos access api",
+  "scripts": {
+    "test": "jasmine",
+    "doc": "jsdoc -c jsdoc.json package.json"
+  },
+  "dependencies": {
+    "database.js": "file:../database.js",
+    "node-ini": "^1.0.0",
+    "axios": "^0.19.0"
+  },
+  "devDependencies": {
+    "jasmine": "^2.5.0",
+    "jasmine-core": "^2.5.0",
+    "jsdoc": "^3.4.0",
+    "jslint": "^0.10.3"
+  },
+  "keywords": [
+    "farmos",
+    "jinong"
+  ],
+  "author": "JoonYong (joonyong.jinong@gmail.com)",
+  "license": "Commercial"
+}

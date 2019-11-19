@@ -1,0 +1,19 @@
+{
+    "cvgateIp" : "http://dev.jinong.co.kr:8880/v1",
+    "database": {
+        "user": "root",
+        "pass": "your pass",
+        "host": "localhost",
+        "db": "farmos"
+    },
+    "fcmkey" : "your key",
+    "sms" : {
+        "url" : "https://apis.aligo.in/send/",
+        "method" : "POST",
+        "form" : {
+            "key" : "your key",
+            "user_id" : "your id",
+            "sender" : "your sender"
+        }
+    }
+}

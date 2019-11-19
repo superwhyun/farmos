@@ -1,0 +1,13 @@
+@import 'spec/settings/index';
+@import 'spec/tools/index'; 
+@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap-vue/dist/bootstrap-vue.css';
+@import 'spec/index';
+@import 'vendor/index';
+@import '~element-ui/lib/theme-chalk/index.css';
+@import '~vue-snotify/styles/material.css';
+
+button:focus {
+  outline: none !important;
+}
+

@@ -1,0 +1,29 @@
+{
+  "name": "rrw_api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "rrw.js",
+  "description": "Farmos access api",
+  "scripts": {
+    "test": "jasmine",
+    "doc": "jsdoc -c jsdoc.json package.json"
+  },
+  "dependencies": {
+    "database.js": "file:../database.js",
+    "jsonfile": "^2.4.0",
+    "mysql2": "^1.6.5",
+    "node-ini": "^1.0.0"
+  },
+  "devDependencies": {
+    "jasmine": "^2.5.0",
+    "jasmine-core": "^2.5.0",
+    "jsdoc": "^3.4.0",
+    "jslint": "^0.10.3"
+  },
+  "keywords": [
+    "farmos",
+    "jinong"
+  ],
+  "author": "JoonYong (joonyong.jinong@gmail.com)",
+  "license": "Commercial"
+}
