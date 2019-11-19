@@ -6,8 +6,10 @@
  */
 
 var config = require('../../conf/config.json')
+var localcoupleFile = '../../../conf/localcouple.json'
 var codeJs = require('./code.js')
 const axios = require('axios')
+const jsonfile = require('jsonfile')
 
 var farmos_api = function () {
     var _pool = require('database.js')();
@@ -1017,11 +1019,11 @@ var farmos_api = function () {
             }
 
             const cvtgate = await getgateinfo()
-            const { data } = await axios.get(`${config.cvgateIp}/gate/${cvtgate.uuid}/couple`)
+            const data = jsonfile.readFileSync(localcoupleFile)
+            //const { data } = await axios.get(`${config.cvgateIp}/gate/${cvtgate.uuid}/couple`)
 
-            //const await axios.get(`${config.cvgateIp}/gate/${cvtgate.uuid}/couple/${cvtgate.couple}/children`)
             for (const device of devices) {
-                for (const couple of data) {
+                for (const couple of data['children']) {
                     if (couple.id === device.coupleid) {
                         for (const gateway of couple.children) {
                             if (gateway.id === device.gateid) {
@@ -1048,7 +1050,7 @@ var farmos_api = function () {
                 }
             }
 
-            for (const couple of data) {
+            for (const couple of data['children']) {
                 if (couple.id === cvtgate.couple) {
                     for (i = couple.children.length - 1; i >= 0; --i) {
                         if (couple.children[i].children.length === 0) {
@@ -1058,8 +1060,11 @@ var farmos_api = function () {
                     break
                 }
             }
+            
+            jsonfile.writeFileSync(localcoupleFile, data)
 
-            let sendData = null
+            /* let sendData = null
+            
             for (const couple of data) {
                 if (couple.id === cvtgate.couple) {
                     sendData = couple
@@ -1067,10 +1072,13 @@ var farmos_api = function () {
                 }
             }
             if (sendData !== null) {
-                await axios.put(`${config.cvgateIp}/gate/${cvtgate.uuid}/couple/${cvtgate.couple}`, sendData)
+                //await axios.put(`${config.cvgateIp}/gate/${cvtgate.uuid}/couple/${cvtgate.couple}`, sendData)
+                let coupleFile = jsonfile.readFileSync(localcoupleFile)
+                
+                jsonfile.writeFileSync(localcoupleFile, sendData)
             } else {
                 throw new Error();
-            }
+            } */
             await connection.commit();
         } catch (error) {
             await connection.rollback();
@@ -1286,7 +1294,17 @@ var farmos_api = function () {
                 })
             })
 
-            await axios.put(`${config.cvgateIp}/gate/${cvtgate.uuid}/couple/${cvtgate.couple}/children`, cvtListTemp)
+            //await axios.put(`${config.cvgateIp}/gate/${cvtgate.uuid}/couple/${cvtgate.couple}/children`, cvtListTemp)
+
+            const localcoupleFileJson = jsonfile.readFileSync(localcoupleFile)
+
+            for (const couple of localcoupleFileJson['children']) {
+                if(couple.id === cvtgate.couple) {
+                    couple.children = cvtListTemp
+                }
+            }
+
+            jsonfile.writeFileSync(localcoupleFile, localcoupleFileJson)
             await connection.commit();
         } catch (error) {
             console.log(error)
@@ -1333,8 +1351,11 @@ var farmos_api = function () {
             let [legacyDevices] = await connection.query(_query, [cvtgate.couple])
             //console.log(legacyDevices)
 
-            const { data } = await axios.get(`${config.cvgateIp}/gate/${cvtgate.uuid}/couple`)
-            for (const couple of data) {
+            //const { data } = await axios.get(`${config.cvgateIp}/gate/${cvtgate.uuid}/couple`)
+
+            const data = jsonfile.readFileSync(localcoupleFile)
+
+            for (const couple of data['children']) {
                 if (couple.id !== cvtgate.couple) {
                     const coupleid = couple.id
                     for (const gate of couple.children) {

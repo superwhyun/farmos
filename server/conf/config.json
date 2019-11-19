@@ -1,5 +1,4 @@
 {
-    "cvgateIp" : "http://dev.jinong.co.kr:8880/v1",
     "database": {
         "user": "root",
         "pass": "your pass",

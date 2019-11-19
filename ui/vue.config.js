@@ -4,7 +4,7 @@ const path = require('path')
 
 module.exports = {
   runtimeCompiler: true,
-  outputDir: path.resolve(__dirname, '../../common_api/api/public'),
+  outputDir: path.resolve(__dirname, '../server/api/public'),
   assetsDir: './assets/',
   configureWebpack: {
     plugins: [

@@ -1,21 +1,8 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : kist.jinong.co.kr
- Source Server Type    : MySQL
- Source Server Version : 50727
- Source Host           : 101.101.167.127:3306
- Source Schema         : test_open
-
- Target Server Type    : MySQL
- Target Server Version : 50727
- File Encoding         : 65001
-
- Date: 19/11/2019 14:08:07
-*/
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+CREATE database farmos;
+USE farmos;
 
 -- ----------------------------
 -- Table structure for configuration
@@ -48,7 +35,7 @@ CREATE TABLE `core_rule_applied` (
   PRIMARY KEY (`id`),
   KEY `fk_core_rule_applied_fields_1` (`field_id`),
   CONSTRAINT `fk_core_rule_applied_fields_1` FOREIGN KEY (`field_id`) REFERENCES `fields` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=218 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for core_rule_template
@@ -64,7 +51,7 @@ CREATE TABLE `core_rule_template` (
   `outputs` text,
   `groupname` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of core_rule_template
@@ -192,7 +179,7 @@ CREATE TABLE `devices` (
   `deleted` int(1) DEFAULT '0',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3333 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for farm
@@ -303,17 +290,5 @@ CREATE TABLE `requests` (
   `status` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Triggers structure for table current_observations
--- ----------------------------
-DROP TRIGGER IF EXISTS `trigger_name`;
-delimiter ;;
-CREATE TRIGGER `trigger_name` BEFORE UPDATE ON `current_observations` FOR EACH ROW BEGIN
-   IF NEW.nvalue != OLD.nvalue THEN
-      SET NEW.modified_time = now();
-   END IF;
-END
-;;
-delimiter ;
 
 SET FOREIGN_KEY_CHECKS = 1;
