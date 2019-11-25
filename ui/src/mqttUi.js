@@ -1,4 +1,3 @@
-import { mqttApi } from '@/constants/config'
 import store from '@/store'
 import mqtt from 'mqtt'
 
@@ -137,12 +136,12 @@ export default (() => {
         client.end()
       }
     },
-    mqttRefresh () {
+    mqttRefresh (host) {
       if (this.isConnected()) {
         return
       }
 
-      client = mqtt.connect(`ws://${mqttApi}`, options)
+      client = mqtt.connect(`ws://${host}:9001`, options)
 
       client.on('connect', function () {
         console.log('client connected:' + options.clientId)

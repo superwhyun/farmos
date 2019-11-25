@@ -50,17 +50,11 @@ export default {
     }
   },
   watch: {
-    /* getCvtgate (newValue, oldValue) {
-      if (newValue.uuid !== oldValue.uuid && newValue.couple !== oldValue.couple) {
-        this.mqtt.mqttClose()
-        this.mqtt.mqttRefresh()
-      }
-    }, */
     getDeviceCouple (newValue, oldValue) {
       if (this.mqtt.isConnected()) {
         this.mqtt.mqttSubscribe()
       } else {
-        this.mqtt.mqttRefresh()
+        this.mqtt.mqttRefresh(window.location.hostname)
       }
     }
   },

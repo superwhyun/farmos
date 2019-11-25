@@ -1,5 +1,4 @@
 export const api = `/common/v1/`
-export const mqttApi = 'kist.jinong.co.kr:9001'
 
 export const commonSpecIp = 'http://dev.jinong.co.kr:10010/v1/devspec'
 
