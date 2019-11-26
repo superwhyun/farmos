@@ -43,6 +43,6 @@ sudo apt install -y nodejs
 
 ## 개발자
 
-* Croft (joonyong@jinong.co.kr)
+* JoonYong (tombraid@snu.ac.kr)
 * Lalafell (cho@jinong.co.kr)
 * 까앙 (do@jinong.co.kr)

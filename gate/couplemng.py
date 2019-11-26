@@ -126,7 +126,7 @@ if __name__ == '__main__':
         sys.exit(2)
 
     mode = sys.argv[1]
-    runner = CoupleManager('cpmng.conf')
+    runner = CoupleManager('../conf/cpmng.conf')
     adaemon = Daemon('cpmng', runner)
     if 'start' == mode:
         adaemon.start()
