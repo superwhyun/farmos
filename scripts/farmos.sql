@@ -1,7 +1,18 @@
+-- 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- 루트 비밀번호 변경
+UPDATE mysql.user SET authentication_string=PASSWORD('farmosv2@') WHERE user='root'; 
+
+-- 데이터베이스 생성
 CREATE database farmos;
+
+-- 사용자 생성
+CREATE USER 'farmos'@'localhost' IDENTIFIED BY 'farmosv2@';
+GRANT ALL PRIVILEGES ON farmos.* TO 'farmos'@'localhost';
+FLUSH PRIVILEGES; 
+
 USE farmos;
 
 -- ----------------------------
