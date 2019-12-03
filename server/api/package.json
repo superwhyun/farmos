@@ -11,6 +11,7 @@
   "license": "Commercial",
   "main": "app.js",
   "dependencies": {
+    "mysql2": "^1.6.5",
     "connect-history-api-fallback": "^1.6.0",
     "cors": "^2.8.5",
     "database.js": "file:../modules/database.js",
