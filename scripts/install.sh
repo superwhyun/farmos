@@ -11,23 +11,23 @@ echo $dirpath
 cd $dirpath
 SHELL_PATH=`pwd -P`
 
-echo '\n\n 1. apt update\n';sudo apt update
-echo '\n\n 2. apt install -y build-essential\n';sudo apt install -y build-essential
-echo '\n\n 3. apt install curl\n'; sudo apt install -y curl
+echo '\n\n 1. apt update\n';apt update
+echo '\n\n 2. apt install -y build-essential\n';apt install -y build-essential
+echo '\n\n 3. apt install curl\n'; apt install -y curl
 
-echo '\n\n 4. apt install python-pip\n'; sudo apt install -y python-pip
-echo '\n\n 4-1. pip install requests\n'; sudo pip install requests
-echo '\n\n 4-2. pip install pypaho-mqtt\n'; sudo pip install paho-mqtt
-echo '\n\n 4-3. pip install pymysql\n'; sudo pip install pymysql
-echo '\n\n 4-4. pip install pymodbus\n'; sudo pip install pymodbus
+echo '\n\n 4. apt install python-pip\n'; apt install -y python-pip
+echo '\n\n 4-1. pip install requests\n'; pip install requests
+echo '\n\n 4-2. pip install pypaho-mqtt\n'; pip install paho-mqtt
+echo '\n\n 4-3. pip install pymysql\n'; pip install pymysql
+echo '\n\n 4-4. pip install pymodbus\n'; pip install pymodbus
 
 
 echo '\n\n 5. mysql check\n'
 which mysql
 if [ $? -eq 1 ];then
-   echo "\n\n apt install mysql-server\n"; sudo apt install -y mysql-server 
-   echo "\n\n systemctl start mysql\n";sudo systemctl start mysql
-   echo "\n\n systemctl enable mysql\n";sudo systemctl enable mysql
+   echo "\n\n apt install mysql-server\n"; apt install -y mysql-server 
+   echo "\n\n systemctl start mysql\n";systemctl start mysql
+   echo "\n\n systemctl enable mysql\n";systemctl enable mysql
 
 else
     echo "mysql installed"
@@ -37,9 +37,9 @@ echo "\nend"
 echo '\n\n 6. node check\n'
 which node
 if [ $? -eq 1 ];then
-    echo "curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -\n";curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -;
-    echo "apt install -y nodejs\n";apt-get install -y nodejs
-    echo "npm install pm2 -g\n";sudo npm install pm2 -g
+    echo "curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -\n";curl -sL https://deb.nodesource.com/setup_11.x | -E bash -;
+    echo "apt install -y nodejs\n";apt install -y nodejs
+    echo "npm install pm2 -g\n";npm install pm2 -g
 else
     echo "node installed"
 fi
@@ -48,24 +48,26 @@ echo "\nend"
 echo '\n\n 7. Mosquitto check\n'
 which mosquitto
 if [ $? -eq 1 ];then
-   echo "\n\n apt install mosquitto\n"; sudo apt install -y mysql-server 
-   echo -e "\nport 1883\nprotocol mqtt\n\nlistener 9001\nprotocol websockets" | sudo tee -a /etc/mosquitto/mosquitto.conf
+   echo "\n\n apt install mosquitto\n"; apt install -y mysql-server 
+   echo -e "\nport 1883\nprotocol mqtt\n\nlistener 9001\nprotocol websockets" | tee -a /etc/mosquitto/mosquitto.conf
 else
     echo "mosquitto installed"
 fi
 echo "\nend"
 
 echo '\n\n 8. database script run \n'
-sudo mysql -u root < farmos.sql
+mysql -u root < farmos.sql
 
 echo '\n\n 9. npm install \n'
 npm --prefix ../server/modules/database.js install ../server/modules/database.js
 npm --prefix ../server/api install ../server/api
 
 echo '\n\n 10. server run \n'
-pm2 start  ../server/api/app.js -- name farmosV2
+pm2 stop farmosV2
+cd ${SHELL_PATH%/*}/server/api
+pm2 start ${SHELL_PATH%/*}/server/api/app.js -- name farmosV2
 pm2 startup
 
 echo '\n\n 11. gate run \n'
-echo "@reboot python ${SHELL_PATH%/*}/gate/couplemng.py" > ./couplemng.cfg | sudo mv couplemng.cfg /etc/cron.d/couplemng.cfg
+echo "@reboot python ${SHELL_PATH%/*}/gate/couplemng.py" > ./couplemng.cfg | mv couplemng.cfg /etc/cron.d/couplemng.cfg
 
