@@ -229,7 +229,7 @@ CREATE TABLE `farmos_user` (
 -- Records of farmos_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `farmos_user` VALUES ('admin', '*4ACFE3202A5FF5CF467898FC58AAB1D615029441', 'user', '{\"name\" :\"관리자\"}', NULL, NULL, '2019-09-02 15:36:00');
+INSERT INTO `farmos_user` VALUES ('farmos', PASSWORD('farmosv2@'), 'user', '{\"name\" :\"관리자\"}', NULL, NULL, '2019-09-02 15:36:00');
 COMMIT;
 
 -- ----------------------------
@@ -270,7 +270,7 @@ CREATE TABLE `gate_info` (
 -- Records of gate_info
 -- ----------------------------
 BEGIN;
-INSERT INTO `gate_info` VALUES ('dce36593-fdb9-476c-8ccf-08907464a21d', '4fcec532-bd9d-4aa2-84d9-a87d027be887', '{\"ACM0\":{\"2\":{\"compcode\":1,\"nodecode\":2,\"devcodes\":[5101,5102,5103,5104]}},\"opid\":61406,\"code\":108,\"ACM1\":{\"1\":{\"compcode\":1,\"nodecode\":10001,\"devcodes\":[101,202]}},\"time\":\"2019-08-30 13:11:12\"}');
+INSERT INTO `gate_info` VALUES ('c315cb82-0f6c-4ed6-b8cc-b00331789494', '4157859e-df55-48e5-b3ac-8e6288f2165e', '{\"ACM0\":{\"2\":{\"compcode\":1,\"nodecode\":2,\"devcodes\":[5101,5102,5103,5104]}},\"opid\":61406,\"code\":108,\"ACM1\":{\"1\":{\"compcode\":1,\"nodecode\":10001,\"devcodes\":[101,202]}},\"time\":\"2019-08-30 13:11:12\"}');
 COMMIT;
 
 -- ----------------------------
