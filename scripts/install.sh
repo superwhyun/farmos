@@ -38,8 +38,8 @@ echo '\n\n 6. node check\n'
 which node
 if [ $? -eq 1 ];then
     echo "curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -\n";curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -;
-    echo "apt install -y nodejs\n";apt-get install -y nodejs
-    echo "npm install pm2 -g\n";sudo npm install pm2 -g
+    echo "apt install -y nodejs\n";apt install -y nodejs
+    echo "npm install pm2 -g\n";npm install pm2 -g
 else
     echo "node installed"
 fi
@@ -63,7 +63,9 @@ npm --prefix ../server/modules/database.js install ../server/modules/database.js
 npm --prefix ../server/api install ../server/api
 
 echo '\n\n 10. server run \n'
-pm2 start  ../server/api/app.js -- name farmosV2
+pm2 stop farmosV2
+cd ${SHELL_PATH%/*}/server/api
+pm2 start ${SHELL_PATH%/*}/server/api/app.js -- name farmosV2
 pm2 startup
 
 echo '\n\n 11. gate run \n'
