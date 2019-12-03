@@ -48,8 +48,12 @@ echo "\nend"
 echo '\n\n 7. Mosquitto check\n'
 which mosquitto
 if [ $? -eq 1 ];then
-   echo "\n\n apt install mosquitto\n"; sudo apt install -y mysql-server 
-   echo -e "\nport 1883\nprotocol mqtt\n\nlistener 9001\nprotocol websockets" | sudo tee -a /etc/mosquitto/mosquitto.conf
+   echo "\n\n apt install mosquitto\n"; sudo apt install -y mosquitto 
+   echo "\nport 1883\nprotocol mqtt\n\nlistener 9001\nprotocol websockets" | sudo tee -a /etc/mosquitto/mosquitto.conf
+   echo "\n\n sudo systemctl restart mosquitto\n"; sudo systemctl restart mosquitto
+   sleep 2
+   echo "\n\n sudo mosquitto -c /etc/mosquitto/mosquitto.conf -d\n"; sudo mosquitto -c /etc/mosquitto/mosquitto.conf -d
+   
 else
     echo "mosquitto installed"
 fi
@@ -70,4 +74,5 @@ pm2 startup
 
 echo '\n\n 11. gate run \n'
 echo "@reboot python ${SHELL_PATH%/*}/gate/couplemng.py" > ./couplemng.cfg | sudo mv couplemng.cfg /etc/cron.d/couplemng.cfg
+
 
