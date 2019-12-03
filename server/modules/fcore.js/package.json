@@ -1,5 +1,5 @@
 {
-  "name": "fcore_api",
+  "name": "fcore.js",
   "version": "1.0.0",
   "private": true,
   "main": "fcore.js",
