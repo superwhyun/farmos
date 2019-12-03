@@ -10,6 +10,7 @@ import time
 import importlib
 import json
 import requests
+import os
 from Queue import Queue
 from daemon import Daemon, Runner
 from mate import Mate
@@ -18,6 +19,9 @@ from mblock import MBlock, BlkType
 class CoupleManager(Runner):
     _couples = []
     _isrunning = False
+
+    # 경로 설정
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
     def __init__(self, configfile):
         fp = open(configfile, 'r')
