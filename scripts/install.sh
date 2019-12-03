@@ -67,12 +67,13 @@ npm --prefix ../server/modules/database.js install ../server/modules/database.js
 npm --prefix ../server/api install ../server/api
 
 echo '\n\n 10. server run \n'
-pm2 stop farmosV2
+sudo pm2 stop farmosV2
 cd ${SHELL_PATH%/*}/server/api
-pm2 start ${SHELL_PATH%/*}/server/api/app.js -- name farmosV2
-pm2 startup
+sudo pm2 start ${SHELL_PATH%/*}/server/api/app.js -- name farmosV2
+sudo pm2 startup
+sudo pm2 save
 
 echo '\n\n 11. gate run \n'
-echo "@reboot python ${SHELL_PATH%/*}/gate/couplemng.py" > ./couplemng.cfg | sudo mv couplemng.cfg /etc/cron.d/couplemng.cfg
-
+echo "python ${SHELL_PATH%/*}/gate/couplemng.py run" > ./couplemng.sh | sudo mv couplemng.sh /etc/profile.d/couplemng.sh
+python ${SHELL_PATH%/*}/gate/couplemng.py start
 
