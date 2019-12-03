@@ -59,6 +59,7 @@ echo '\n\n 8. database script run \n'
 sudo mysql -u root < farmos.sql
 
 echo '\n\n 9. npm install \n'
+npm --prefix ../server/modules/database.js install ../server/modules/database.js
 npm --prefix ../server/api install ../server/api
 
 echo '\n\n 10. server run \n'

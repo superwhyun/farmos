@@ -10,8 +10,7 @@
   },
   "dependencies": {
     "database.js": "file:../database.js",
-    "jsonfile": "^2.4.0",
-    "mysql2": "^1.6.5",
+    "jsonfile": "^5.0.0",
     "node-ini": "^1.0.0"
   },
   "devDependencies": {
