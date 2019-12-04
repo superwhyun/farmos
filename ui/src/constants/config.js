@@ -2,7 +2,7 @@ export const api = `/common/v1/`
 
 export const commonSpecIp = 'http://dev.jinong.co.kr:10010/v1/devspec'
 
-export const daumMapApiKey = 'ac8f25e20e7cbd0abf0dc5b6fa4c9689'
+export const daumMapApiKey = '43b4f54e98ebd05d4fd91a33f9a1d17d'
 export const openweathermapKey = '1c6b5c1190ada7c0060956e573ab474b'
 
 export const cropCode = [
