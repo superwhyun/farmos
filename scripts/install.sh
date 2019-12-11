@@ -74,6 +74,6 @@ sudo pm2 startup
 sudo pm2 save
 
 echo '\n\n 11. gate run \n'
-echo "python ${SHELL_PATH%/*}/gate/couplemng.py run" > ./couplemng.sh | sudo mv couplemng.sh /etc/profile.d/couplemng.sh
+echo "python ${SHELL_PATH%/*}/gate/couplemng.py start" > ./couplemng.sh | sudo mv couplemng.sh /etc/profile.d/couplemng.sh
 python ${SHELL_PATH%/*}/gate/couplemng.py start
 
