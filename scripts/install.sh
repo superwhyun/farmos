@@ -16,19 +16,18 @@ echo '\n\n 2. apt install -y build-essential\n';sudo apt install -y build-essent
 echo '\n\n 3. apt install curl\n'; sudo apt install -y curl
 
 echo '\n\n 4. apt install python-pip\n'; sudo apt install -y python-pip
-echo '\n\n 4-1. pip install requests\n'; sudo pip install requests
-echo '\n\n 4-2. pip install pypaho-mqtt\n'; sudo pip install paho-mqtt
-echo '\n\n 4-3. pip install pymysql\n'; sudo pip install pymysql
-echo '\n\n 4-4. pip install pymodbus\n'; sudo pip install pymodbus
+echo '\n\n 4-1. pip install requests\n'; pip install requests
+echo '\n\n 4-2. pip install pypaho-mqtt\n'; pip install paho-mqtt
+echo '\n\n 4-3. pip install pymysql\n'; pip install pymysql
+echo '\n\n 4-4. pip install pymodbus\n'; pip install pymodbus
 
 
 echo '\n\n 5. mysql check\n'
 which mysql
 if [ $? -eq 1 ];then
    echo "\n\n apt install mysql-server\n"; sudo apt install -y mysql-server 
-   echo "\n\n systemctl start mysql\n";sudo systemctl start mysql
-   echo "\n\n systemctl enable mysql\n";sudo systemctl enable mysql
-
+   echo "\n\n systemctl start mysql\n"; sudo systemctl start mysql
+   echo "\n\n systemctl enable mysql\n"; sudo systemctl enable mysql
 else
     echo "mysql installed"
 fi
@@ -37,12 +36,13 @@ echo "\nend"
 echo '\n\n 6. node check\n'
 which node
 if [ $? -eq 1 ];then
-    echo "curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -\n";curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -;
-    echo "apt install -y nodejs\n";apt install -y nodejs
-    echo "npm install pm2 -g\n";npm install pm2 -g
-else
-    echo "node installed"
+    echo "apt purge node\n"; sudo apt purge node
 fi
+
+
+echo "curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -\n"; curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -;
+echo "apt install -y nodejs\n"; sudo apt install -y nodejs
+echo "npm install pm2 -g\n"; npm install pm2 -g
 echo "\nend"
 
 echo '\n\n 7. Mosquitto check\n'
@@ -53,7 +53,6 @@ if [ $? -eq 1 ];then
    echo "\n\n sudo systemctl restart mosquitto\n"; sudo systemctl restart mosquitto
    sleep 2
    echo "\n\n sudo mosquitto -c /etc/mosquitto/mosquitto.conf -d\n"; sudo mosquitto -c /etc/mosquitto/mosquitto.conf -d
-   
 else
     echo "mosquitto installed"
 fi
@@ -63,12 +62,10 @@ echo '\n\n 8. database script run \n'
 sudo mysql -u root < farmos.sql
 
 echo '\n\n 9. npm install \n'
-npm --prefix ../server/modules/database.js install ../server/modules/database.js
 npm --prefix ../server/api install ../server/api
 
 echo '\n\n 10. server run \n'
 sudo pm2 stop farmosV2
-cd ${SHELL_PATH%/*}/server/api
 sudo pm2 start ${SHELL_PATH%/*}/server/api/app.js -- name farmosV2
 sudo pm2 startup
 sudo pm2 save
