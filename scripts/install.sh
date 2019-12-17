@@ -62,6 +62,7 @@ echo '\n\n 8. database script run \n'
 sudo mysql -u root < farmos.sql
 
 echo '\n\n 9. npm install \n'
+npm --prefix ../server/modules/database.js install ../server/modules/database.js
 npm --prefix ../server/api install ../server/api
 
 echo '\n\n 10. server run \n'
@@ -71,6 +72,7 @@ sudo pm2 startup
 sudo pm2 save
 
 echo '\n\n 11. gate run \n'
-echo "python ${SHELL_PATH%/*}/gate/couplemng.py start" > ./couplemng.sh | sudo mv couplemng.sh /etc/profile.d/couplemng.sh
+sudo mkdir /etc/rc.local
+echo "python ${SHELL_PATH%/*}/gate/couplemng.py" > ./couplemng.sh | sudo mv couplemng.sh /etc/rc.local/couplemng.sh
 python ${SHELL_PATH%/*}/gate/couplemng.py start
 
