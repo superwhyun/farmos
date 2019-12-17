@@ -67,6 +67,7 @@ npm --prefix ../server/api install ../server/api
 
 echo '\n\n 10. server run \n'
 sudo pm2 stop farmosV2
+cd ${SHELL_PATH%/*}/server/api
 sudo pm2 start ${SHELL_PATH%/*}/server/api/app.js -- name farmosV2
 sudo pm2 startup
 sudo pm2 save
