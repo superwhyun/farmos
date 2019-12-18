@@ -74,10 +74,37 @@ def radaccumulate(inputs, pvalues, dbcur):
     else:
         before = 0
 
-    acc = before + inputs["#outrad1"].getvalue() * 0.000011574
+    acc = before + inputs["#outrad1"].getvalue() * 0.0036
 
     return (RetCode.OK, [acc, day])
 
+def estimatepos(inputs, pvalues, dbcur):
+    """
+    inputs: #winact0, #winact4, #opentime, #closetime
+    outputs : pos
+    """
+    if pvalues is None or len(pvalues) == 0:
+        pos = 0
+        ptime = 0
+        pstat = 0 # READY
+    else: 
+        pos = pvalues[0]
+        ptime = pvalues[1]
+        pstat = pvalues[2]
+
+    if inputs["#winact0"].getvalue() == 301:  # Opening
+        if pstat == 301 and ptime >= inputs["#winact4"].getvalue(): # previous command 
+            pos = pos + (ptime - inputs["#winact4"].getvalue()) / inputs["#opentime"].getvalue()
+        ptime = inputs["#winact4"].getvalue()
+        pstat = inputs["#winact0"].getvalue()
+
+    elif inputs["#winact0"].getvalue() == 302: # Closing
+        if pstat == 302 and ptime >= inputs["#winact4"].getvalue(): # previous command 
+            pos = pos + (ptime - inputs["#winact4"].getvalue()) / inputs["#closetime"].getvalue()
+        ptime = inputs["#winact4"].getvalue()
+        pstat = inputs["#winact0"].getvalue()
+
+    return (RetCode.OK, [pos, ptime, pstat])
 
 
 if __name__ == '__main__':

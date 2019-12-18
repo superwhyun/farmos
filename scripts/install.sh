@@ -73,7 +73,14 @@ sudo pm2 startup
 sudo pm2 save
 
 echo '\n\n 11. gate run \n'
-sudo mkdir /etc/rc.local
-echo "python ${SHELL_PATH%/*}/gate/couplemng.py" > ./couplemng.sh | sudo mv couplemng.sh /etc/rc.local/couplemng.sh
-python ${SHELL_PATH%/*}/gate/couplemng.py start
+#sudo mkdir /etc/rc.local
+echo "#/bin/bash \n python ${SHELL_PATH%/*}/gate/couplemng.py $1" > ./cvtgate | sudo mv cvtgate /etc/init.d/cvtgate | sudo chmod +x /etc/init.d/cvtgate
+#python ${SHELL_PATH%/*}/gate/couplemng.py start
+sudo /etc/init.d/cvtgate start
+
+echo '\n\n 12. core run \n'
+#sudo mkdir /etc/rc.local
+echo "#/bin/bash \n python ${SHELL_PATH%/*}/fcore/fcore.py $1" > ./fcore | sudo mv fcore /etc/init.d/fcore | sudo chmod +x /etc/init.d/fcore
+#python ${SHELL_PATH%/*}/fcore/fcore.py start
+sudo /etc/init.d/fcore start
 
