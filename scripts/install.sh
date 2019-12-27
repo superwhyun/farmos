@@ -65,22 +65,125 @@ echo '\n\n 9. npm install \n'
 npm --prefix ../server/modules/database.js install ../server/modules/database.js
 npm --prefix ../server/api install ../server/api
 
-echo '\n\n 10. server run \n'
-sudo pm2 stop farmosV2
-cd ${SHELL_PATH%/*}/server/api
-sudo pm2 start ${SHELL_PATH%/*}/server/api/app.js -- name farmosV2
-sudo pm2 startup
-sudo pm2 save
+echo '\n\n 10. ui installation \n'
+cat << "EOF" > "fui"
+#!/bin/bash
 
-echo '\n\n 11. gate run \n'
-#sudo mkdir /etc/rc.local
-echo "#/bin/bash \n python ${SHELL_PATH%/*}/gate/couplemng.py $1" > ./cvtgate | sudo mv cvtgate /etc/init.d/cvtgate | sudo chmod +x /etc/init.d/cvtgate
-#python ${SHELL_PATH%/*}/gate/couplemng.py start
-sudo /etc/init.d/cvtgate start
+### BEGIN INIT INFO
+# Provides:          farmos_ui
+# Required-Start:    mysql
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daemon at boot time
+# Description:       Enable farmos UI service provided by daemon.
+### END INIT INFO
+EOF
 
-echo '\n\n 12. core run \n'
-#sudo mkdir /etc/rc.local
-echo "#/bin/bash \n python ${SHELL_PATH%/*}/fcore/fcore.py $1" > ./fcore | sudo mv fcore /etc/init.d/fcore | sudo chmod +x /etc/init.d/fcore
-#python ${SHELL_PATH%/*}/fcore/fcore.py start
+echo "WORK_DIR=\"${SHELL_PATH%/*}/server/api\"" >> fui
+
+cat << "EOF" >> "fui"
+case "$1" in
+  start)
+    echo "Starting server"
+    cd "$WORK_DIR"
+    pm2 start "${WORK_DIR}/server/api/app.js" -- name farmosV2
+    pm2 startup
+    pm2 save
+    ;;
+  stop)
+    echo "Stopping server"
+    pm2 stop farmosV2
+    ;;
+  *)
+    echo "Usage: /etc/init.d/fui {start|stop}"
+    exit 1
+    ;;
+esac
+exit 0
+EOF
+
+sudo mv fui /etc/init.d/fui | sudo chmod +x /etc/init.d/fui
+
+echo '\n\n 11. gate installation \n'
+cat << "EOF" > "cvtgate"
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          farmos_gate
+# Required-Start:    mysql
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daemon at boot time
+# Description:       Enable farmos gate service provided by daemon.
+### END INIT INFO
+EOF
+
+echo "WORK_DIR=\"${SHELL_PATH%/*}/gate\"" >> cvtgate
+
+cat << "EOF" >> "cvtgate"
+case "$1" in
+  start)
+    echo "Starting server"
+    cd "$WORK_DIR"
+    python couplemng.py start
+    ;;
+  stop)
+    echo "Stopping server"
+    cd "$WORK_DIR"
+    python couplemng.py stop
+    ;;
+  *)
+    echo "Usage: /etc/init.d/cvtgate {start|stop}"
+    exit 1
+    ;;
+esac
+exit 0
+EOF
+
+sudo mv cvtgate /etc/init.d/cvtgate | sudo chmod +x /etc/init.d/cvtgate
+
+echo '\n\n 12. core installation \n'
+cat << "EOF" > "core"
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          farmos_core
+# Required-Start:    mysql
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daemon at boot time
+# Description:       Enable farmos core service provided by daemon.
+### END INIT INFO
+EOF
+
+echo "WORK_DIR=\"${SHELL_PATH%/*}/fcore\"" >> core
+
+cat << "EOF" >> "core"
+case "$1" in
+  start)
+    echo "Starting server"
+    cd "$WORK_DIR"
+    python fcore.py start
+    ;;
+  stop)
+    echo "Stopping server"
+    python fcore.py stop
+    ;;
+  *)
+    echo "Usage: /etc/init.d/core {start|stop}"
+    exit 1
+    ;;
+esac
+exit 0
+EOF
+
+sudo mv core /etc/init.d/core | sudo chmod +x /etc/init.d/core
+
+echo '\n\n 13. service run\n'
+
+sudo /etc/init.d/fui start
 sudo /etc/init.d/fcore start
-
+sudo /etc/init.d/cvtgate start
