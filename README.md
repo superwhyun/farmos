@@ -19,6 +19,23 @@ FarmOS V2는 주식회사 지농에서 개발한 개방형 스마트팜 제어�
  sudo ./install.sh
  ```
 
+## 실행방법
+ 설치가 오류없이 완료되면 자동으로 프로그램이 실행됩니다. 
+ 프로그램은 fui, cvtgate, fcore의 세부분으로 나뉘며 각각의 시작 및 중지는 아래와 같이 수행할 수 있습니다.
+
+### 시작
+ ```
+ sudo /etc/init.d/fui start
+ sudo /etc/init.d/cvtgate start
+ sudo /etc/init.d/fcore start
+ ```
+### 중지
+ ```
+ sudo /etc/init.d/fui stop
+ sudo /etc/init.d/cvtgate stop
+ sudo /etc/init.d/fcore stop
+ ```
+
 ## 의존성
 FarmOSV2의 구동을 위해서는 다음의 환경이 필요합니다. 
 * [mysql](https://www.mysql.com)
@@ -38,11 +55,11 @@ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt install -y nodejs
 ```
 
-* 기타패키지
-위의 3가지 패키지 이외에도 다음과 같은 패키지 들이 필요합니다.
+* [python](http://python.org)
+python은 인터프리트형 고수준 언어로 다양한 영역의 어플리케이션을 제작하는데 활용되고 있습니다. 일반적인 리눅스 배포판에 디폴트로 설치되어 나오기 때문에 별도로 설치할 필요는 없습니다. 다만, 필요한 패키지들을 설치할 필요는 있습니다. 
 
 ## 개발자
 
 * JoonYong (tombraid@snu.ac.kr)
-* Lalafell (cho@jinong.co.kr)
+* Lalafell (choys@jinong.co.kr)
 * 까앙 (do@jinong.co.kr)

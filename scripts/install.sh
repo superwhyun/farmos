@@ -16,10 +16,12 @@ echo '\n\n 2. apt install -y build-essential\n';sudo apt install -y build-essent
 echo '\n\n 3. apt install curl\n'; sudo apt install -y curl
 
 echo '\n\n 4. apt install python-pip\n'; sudo apt install -y python-pip
-echo '\n\n 4-1. pip install requests\n'; pip install requests
-echo '\n\n 4-2. pip install pypaho-mqtt\n'; pip install paho-mqtt
-echo '\n\n 4-3. pip install pymysql\n'; pip install pymysql
-echo '\n\n 4-4. pip install pymodbus\n'; pip install pymodbus
+echo '\n\n 4-1. pip install --upgrade pip\n'; pip install --upgrade pip
+echo '\n\n 4-2. pip install --upgrade setuptools\n'; pip uninstall distribute; pip install --upgrade setuptools
+echo '\n\n 4-3. pip install requests\n'; pip install requests
+echo '\n\n 4-4. pip install pypaho-mqtt\n'; pip install paho-mqtt
+echo '\n\n 4-5. pip install pymysql\n'; pip install pymysql
+echo '\n\n 4-6. pip install pymodbus\n'; pip install pymodbus
 
 
 echo '\n\n 5. mysql check\n'
@@ -81,12 +83,12 @@ cat << "EOF" > "fui"
 EOF
 
 echo "WORK_DIR=\"${SHELL_PATH%/*}/server/api\"" >> fui
+cd "$WORK_DIR"
 
 cat << "EOF" >> "fui"
 case "$1" in
   start)
     echo "Starting server"
-    cd "$WORK_DIR"
     pm2 start "${WORK_DIR}/server/api/app.js" -- name farmosV2
     pm2 startup
     pm2 save
@@ -121,12 +123,12 @@ cat << "EOF" > "cvtgate"
 EOF
 
 echo "WORK_DIR=\"${SHELL_PATH%/*}/gate\"" >> cvtgate
+cd "$WORK_DIR"
 
 cat << "EOF" >> "cvtgate"
 case "$1" in
   start)
     echo "Starting server"
-    cd "$WORK_DIR"
     python couplemng.py start
     ;;
   stop)
@@ -160,12 +162,12 @@ cat << "EOF" > "core"
 EOF
 
 echo "WORK_DIR=\"${SHELL_PATH%/*}/fcore\"" >> core
+cd "$WORK_DIR"
 
 cat << "EOF" >> "core"
 case "$1" in
   start)
     echo "Starting server"
-    cd "$WORK_DIR"
     python fcore.py start
     ;;
   stop)
