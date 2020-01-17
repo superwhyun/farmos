@@ -4,6 +4,8 @@ var swaggerUi = require('swagger-ui-express');
 var history = require('connect-history-api-fallback');
 var cors = require('cors');
 
+process.chdir(__dirname)
+
 require('database.js')(require('jsonfile').readFileSync('../../conf/config.json'))
 const docs = '/docs';
 

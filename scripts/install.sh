@@ -22,7 +22,8 @@ echo '\n\n 4-3. pip install requests\n'; pip install requests
 echo '\n\n 4-4. pip install pypaho-mqtt\n'; pip install paho-mqtt
 echo '\n\n 4-5. pip install pymysql\n'; pip install pymysql
 echo '\n\n 4-6. pip install pymodbus\n'; pip install pymodbus
-
+echo '\n\n 4-7. pip install simpleeval\n'; pip install simpleeval
+echo '\n\n 4-8. pip install subprocess32\n'; pip install subprocess32
 
 echo '\n\n 5. mysql check\n'
 which mysql
@@ -44,7 +45,7 @@ fi
 
 echo "curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -\n"; curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -;
 echo "apt install -y nodejs\n"; sudo apt install -y nodejs
-echo "npm install pm2 -g\n"; npm install pm2 -g
+echo "npm install forever -g\n"; npm install forever -g
 echo "\nend"
 
 echo '\n\n 7. Mosquitto check\n'
@@ -89,13 +90,11 @@ cat << "EOF" >> "fui"
 case "$1" in
   start)
     echo "Starting server"
-    pm2 start "${WORK_DIR}/server/api/app.js" -- name farmosV2
-    pm2 startup
-    pm2 save
+    forever start --uid "farmosV2" -a "${WORK_DIR}/app.js"
     ;;
   stop)
     echo "Stopping server"
-    pm2 stop farmosV2
+    forever stop farmosV2
     ;;
   *)
     echo "Usage: /etc/init.d/fui {start|stop}"
@@ -105,7 +104,8 @@ esac
 exit 0
 EOF
 
-sudo mv fui /etc/init.d/fui | sudo chmod +x /etc/init.d/fui
+sudo chmod +x fui
+sudo mv fui /etc/init.d/fui
 
 echo '\n\n 11. gate installation \n'
 cat << "EOF" > "cvtgate"
@@ -144,10 +144,11 @@ esac
 exit 0
 EOF
 
-sudo mv cvtgate /etc/init.d/cvtgate | sudo chmod +x /etc/init.d/cvtgate
+sudo chmod +x cvtgate
+sudo mv cvtgate /etc/init.d/cvtgate
 
 echo '\n\n 12. core installation \n'
-cat << "EOF" > "core"
+cat << "EOF" > "fcore"
 #!/bin/bash
 
 ### BEGIN INIT INFO
@@ -161,10 +162,10 @@ cat << "EOF" > "core"
 ### END INIT INFO
 EOF
 
-echo "WORK_DIR=\"${SHELL_PATH%/*}/fcore\"" >> core
+echo "WORK_DIR=\"${SHELL_PATH%/*}/fcore\"" >> fcore
 cd "$WORK_DIR"
 
-cat << "EOF" >> "core"
+cat << "EOF" >> "fcore"
 case "$1" in
   start)
     echo "Starting server"
@@ -175,14 +176,15 @@ case "$1" in
     python fcore.py stop
     ;;
   *)
-    echo "Usage: /etc/init.d/core {start|stop}"
+    echo "Usage: /etc/init.d/fcore {start|stop}"
     exit 1
     ;;
 esac
 exit 0
 EOF
 
-sudo mv core /etc/init.d/core | sudo chmod +x /etc/init.d/core
+sudo chmod +x fcore
+sudo mv fcore /etc/init.d/fcore
 
 echo '\n\n 13. service run\n'
 
