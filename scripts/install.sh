@@ -81,12 +81,14 @@ cat << "EOF" > "fui"
 # Short-Description: Start daemon at boot time
 # Description:       Enable farmos UI service provided by daemon.
 ### END INIT INFO
+
 EOF
 
 echo "WORK_DIR=\"${SHELL_PATH%/*}/server/api\"" >> fui
-cd "$WORK_DIR"
 
 cat << "EOF" >> "fui"
+cd "$WORK_DIR"
+
 case "$1" in
   start)
     echo "Starting server"
@@ -120,12 +122,14 @@ cat << "EOF" > "cvtgate"
 # Short-Description: Start daemon at boot time
 # Description:       Enable farmos gate service provided by daemon.
 ### END INIT INFO
+
 EOF
 
 echo "WORK_DIR=\"${SHELL_PATH%/*}/gate\"" >> cvtgate
-cd "$WORK_DIR"
 
 cat << "EOF" >> "cvtgate"
+cd "$WORK_DIR"
+
 case "$1" in
   start)
     echo "Starting server"
@@ -160,12 +164,14 @@ cat << "EOF" > "fcore"
 # Short-Description: Start daemon at boot time
 # Description:       Enable farmos core service provided by daemon.
 ### END INIT INFO
+
 EOF
 
 echo "WORK_DIR=\"${SHELL_PATH%/*}/fcore\"" >> fcore
-cd "$WORK_DIR"
 
 cat << "EOF" >> "fcore"
+cd "$WORK_DIR"
+
 case "$1" in
   start)
     echo "Starting server"
