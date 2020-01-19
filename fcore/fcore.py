@@ -68,7 +68,7 @@ if __name__ == '__main__':
         sys.exit(2)
 
     mode = sys.argv[1]
-    runner = FCore('conf/fcore.json', util.getdefaultlogger())
+    runner = FCore('../conf/fcore.json', util.getdefaultlogger())
     adaemon = Daemon('fcore', runner)
     if 'start' == mode:
         adaemon.start()
