@@ -19,7 +19,7 @@ echo '\n\n 4. apt install python-pip\n'; sudo apt install -y python-pip
 echo '\n\n 4-1. pip install --upgrade pip\n'; pip install --upgrade pip
 echo '\n\n 4-2. pip install --upgrade setuptools\n'; pip uninstall distribute; pip install --upgrade setuptools
 echo '\n\n 4-3. pip install requests\n'; pip install requests
-echo '\n\n 4-4. pip install pypaho-mqtt\n'; pip install paho-mqtt
+echo '\n\n 4-4. pip install paho-mqtt\n'; pip install paho-mqtt
 echo '\n\n 4-5. pip install pymysql\n'; pip install pymysql
 echo '\n\n 4-6. pip install pymodbus\n'; pip install pymodbus
 echo '\n\n 4-7. pip install simpleeval\n'; pip install simpleeval
