@@ -84,22 +84,22 @@ cat << "EOF" > "fui"
 
 EOF
 
-echo -e "WORK_DIR=\"${SHELL_PATH%/*}/server/api\"" >> fui
+echo "WORK_DIR=\"${SHELL_PATH%/*}/server/api\"" >> fui
 
 cat << "EOF" >> "fui"
 cd "$WORK_DIR"
 
 case "$1" in
   start)
-    echo -e "Starting server"
+    echo "Starting server"
     forever start --uid "farmosV2" -a "${WORK_DIR}/app.js"
     ;;
   stop)
-    echo -e "Stopping server"
+    echo "Stopping server"
     forever stop farmosV2
     ;;
   *)
-    echo -e "Usage: /etc/init.d/fui {start|stop}"
+    echo "Usage: /etc/init.d/fui {start|stop}"
     exit 1
     ;;
 esac
@@ -125,7 +125,7 @@ cat << "EOF" > "cvtgate"
 
 EOF
 
-echo -e "WORK_DIR=\"${SHELL_PATH%/*}/gate\"" >> cvtgate
+echo "WORK_DIR=\"${SHELL_PATH%/*}/gate\"" >> cvtgate
 
 cat << "EOF" >> "cvtgate"
 cd "$WORK_DIR"
@@ -167,22 +167,22 @@ cat << "EOF" > "fcore"
 
 EOF
 
-echo -e "WORK_DIR=\"${SHELL_PATH%/*}/fcore\"" >> fcore
+echo "WORK_DIR=\"${SHELL_PATH%/*}/fcore\"" >> fcore
 
 cat << "EOF" >> "fcore"
 cd "$WORK_DIR"
 
 case "$1" in
   start)
-    echo -e "Starting server"
+    echo "Starting server"
     python fcore.py start
     ;;
   stop)
-    echo -e "Stopping server"
+    echo "Stopping server"
     python fcore.py stop
     ;;
   *)
-    echo -e "Usage: /etc/init.d/fcore {start|stop}"
+    echo "Usage: /etc/init.d/fcore {start|stop}"
     exit 1
     ;;
 esac
