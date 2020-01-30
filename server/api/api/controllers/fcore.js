@@ -10,16 +10,16 @@
 var configdir = __dirname + '/../../../conf/'
 var configfile = 'hasg-ui.json'
 
-var jsonfile = require('jsonfile');
-var conffile = '../../common_api/conf/config.json';
-var _config = jsonfile.readFileSync(conffile);
+//var jsonfile = require('jsonfile');
+//var conffile = '../../common_api/conf/config.json';
+//var _config = jsonfile.readFileSync(conffile);
 
 var fs = require('fs')
 var fcore = require('fcore.js')
 
 var farmosconfig = __dirname + '/farmos-server.ini'
 var farmos = require('farmos.js')
-var _modulename = 'fcore api'
+//var _modulename = 'fcore api'
 
 var fcore_api = function() {
   var _readconfig = function(fname) {
