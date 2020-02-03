@@ -33,7 +33,7 @@
 					"conn": [
 						{
 							"method": "rtu",
-							"port": "/dev/ttyUSB0",
+							"port": "/dev/ttyACM0",
 							"baudrate": 9600,
 							"timeout": 5
 						}
