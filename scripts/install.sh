@@ -19,7 +19,7 @@ echo -e '\n\n 3. apt install curl\n'; sudo apt install -y curl
 
 echo -e '\n\n 4. apt install python-pip\n'; sudo apt install -y python-pip
 echo -e '\n\n 4-1. pip install --upgrade pip\n'; pip install --upgrade pip
-echo -e '\n\n 4-2. pip install --upgrade setuptools\n'; pip uninstall distribute; pip install --upgrade setuptools
+echo -e '\n\n 4-2. pip install --upgrade setuptools\n'; pip uninstall -y distribute; pip install --upgrade setuptools
 echo -e '\n\n 4-3. pip install requests\n'; pip install requests
 echo -e '\n\n 4-4. pip install paho-mqtt\n'; pip install paho-mqtt
 echo -e '\n\n 4-5. pip install pymysql\n'; pip install pymysql
