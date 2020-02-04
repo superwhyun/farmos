@@ -18,14 +18,14 @@ echo -e '\n\n 2. apt install -y build-essential\n';sudo apt install -y build-ess
 echo -e '\n\n 3. apt install curl\n'; sudo apt install -y curl rdate
 
 echo -e '\n\n 4. apt install python-pip\n'; sudo apt install -y python-pip
-echo -e '\n\n 4-1. pip install --upgrade pip\n'; pip install --upgrade -y pip
-echo -e '\n\n 4-2. pip install --upgrade setuptools\n'; pip uninstall -y distribute; pip install --upgrade -y setuptools
-echo -e '\n\n 4-3. pip install requests\n'; pip install -y requests
-echo -e '\n\n 4-4. pip install paho-mqtt\n'; pip install -y paho-mqtt
-echo -e '\n\n 4-5. pip install pymysql\n'; pip install -y pymysql
-echo -e '\n\n 4-6. pip install pymodbus\n'; pip install -y pymodbus
-echo -e '\n\n 4-7. pip install simpleeval\n'; pip install -y simpleeval
-echo -e '\n\n 4-8. pip install subprocess32\n'; pip install -y subprocess32
+echo -e '\n\n 4-1. pip install --upgrade pip\n'; pip install --upgrade pip
+echo -e '\n\n 4-2. pip install --upgrade setuptools\n'; pip uninstall -y distribute; pip install --upgrade setuptools
+echo -e '\n\n 4-3. pip install requests\n'; pip install requests
+echo -e '\n\n 4-4. pip install paho-mqtt\n'; pip install paho-mqtt
+echo -e '\n\n 4-5. pip install pymysql\n'; pip install pymysql
+echo -e '\n\n 4-6. pip install pymodbus\n'; pip install pymodbus
+echo -e '\n\n 4-7. pip install simpleeval\n'; pip install simpleeval
+echo -e '\n\n 4-8. pip install subprocess32\n'; pip install subprocess32
 
 echo -e '\n\n 5. mysql check\n'
 which mysql
