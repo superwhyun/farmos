@@ -14,7 +14,7 @@
         </div>
       </b-col>
     </b-row>
-    <b-row class="mb-2">
+    <b-row class="mb-2" v-if="getGreenHouse.length > 0">
       <b-col lg="7">
         <h4 class="c-grey-900 mT-30">온실 상황</h4>
         <div v-for="house in getGreenHouse" :key="house.id">

@@ -5,7 +5,13 @@
       <div class="ml-auto el-icon-setting" style="z-index: 1;" @click="showDialog = true"></div>
     </div>
     <div v-if="showChart" ref="chartdiv" style="height:90%"></div>
-    <div v-else>스위치 데이터를 선택 하세요</div>
+    <div v-else  style="height:100%;text-align: center;">
+      <div style="margin: 0;top:50%;left:50%;position: absolute;-ms-transform: translateX(-50%) translateY(-50%);transform: translateX(-50%) translateY(-50%);">
+        <img src="@/assets/img/nodata.png" style="height:40px"/>
+        <br><br>
+      <div>선택된 {{path === 'retractable' ? '개폐기' : '스위치'}} 데이터가 없습니다.</div>
+    </div>
+    </div>
     <Transfer
       :fieldId="fieldId"
       :path="['dashboard',path]"
@@ -71,12 +77,12 @@ export default {
         tempData = this.uiInfo
       }
 
-      if (Object.values(tempData).length === 0) {
+      /* if (Object.values(tempData).length === 0) {
         this.showChart = false
         return
       } else {
         this.showChart = true
-      }
+      } */
 
       await this.$nextTick()
       this.chart = am4core.create(this.$refs.chartdiv, am4charts.XYChart3D)
@@ -148,6 +154,7 @@ export default {
           color: this.chart.colors.next(),
           color2: this.chart.colors.next()
         })
+        this.showChart = true
       }
       this.chart.data = data
     }

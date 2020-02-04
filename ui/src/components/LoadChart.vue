@@ -9,7 +9,13 @@
       style="height:100%;margin-top: -25px;"
       :value="obs[uiInfo[uiType].data[0]].nvalue"
     />
-    <div v-else>{{name}} 데이터를 선택 하세요</div>
+    <div v-else  style="height:100%;text-align: center;">
+      <div style="margin: 0;top:50%;left:50%;position: absolute;-ms-transform: translateX(-50%) translateY(-50%);transform: translateX(-50%) translateY(-50%);">
+        <img src="@/assets/img/nodata.png" style="height:40px"/>
+        <br><br>
+        <div>선택된 {{name}} 데이터가 없습니다.</div>
+      </div>
+    </div>
     <Transfer
       :fieldId="fieldId"
       :path="['dashboard',uiType]"
