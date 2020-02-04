@@ -199,3 +199,7 @@ echo -e '\n\n 13. service run\n'
 sudo /etc/init.d/fui start
 sudo /etc/init.d/fcore start
 sudo /etc/init.d/cvtgate start
+
+sudo update-rc.d fui defaults
+sudo update-rc.d fcore defaults
+sudo update-rc.d cvtgate defaults
