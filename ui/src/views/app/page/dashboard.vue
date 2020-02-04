@@ -158,7 +158,12 @@
                                     :value="getObsData(observationData[(100000 + getRetractable[house.id][((slide-1)*5)+item-1].id) * 100])"
                                   />
                                 </div>
-                                남은 시간 {{observationData[(100000 + getRetractable[house.id][((slide-1)*5)+item-1].id) * 100 + 4].nvalue}}초
+                                <template v-if="observationData[(100000 + getRetractable[house.id][((slide-1)*5)+item-1].id) * 100 + 4]">
+                                  남은 시간 {{observationData[(100000 + getRetractable[house.id][((slide-1)*5)+item-1].id) * 100 + 4].nvalue}}초
+                                </template>
+                                <template>
+                                  남은시간 미지원
+                                </template>
                                 <br />
                               </div>
                             </div>
@@ -211,7 +216,12 @@
                                     :value="getObsData(observationData[(100000 + getSwitch[house.id][((slide-1)*5)+item-1].id) * 100])"
                                   />
                                 </div>
-                                남은 시간 {{observationData[(100000 + getSwitch[house.id][((slide-1)*5)+item-1].id) * 100 + 4].nvalue}}초
+                                <template v-if="observationData[(100000 + getSwitch[house.id][((slide-1)*5)+item-1].id) * 100 + 4]">
+                                  남은 시간 {{observationData[(100000 + getSwitch[house.id][((slide-1)*5)+item-1].id) * 100 + 4].nvalue}}초
+                                </template>
+                                <template>
+                                  남은시간 미지원
+                                </template>
                                 <br />
                               </div>
                             </div>
