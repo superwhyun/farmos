@@ -60,6 +60,9 @@ class ModuleProcessor(Processor):
 def f_exp(x):
     return math.exp(x)
 
+def f_log(x):
+    return math.log(x)
+
 class EquationProcessor(Processor):
     """
     단순한 수식을 평가하는 프로세서
@@ -75,9 +78,9 @@ class EquationProcessor(Processor):
         values = []
         if isinstance(proc["eq"], list):
             for eq in proc["eq"]:
-                values.append (simple_eval(eq, names=self.namehandler, functions={"exp":f_exp}))
+                values.append (simple_eval(eq, names=self.namehandler, functions={"exp":f_exp, "log":f_log}))
         else:
-            values.append (simple_eval(proc["eq"], names=self.namehandler, functions={"exp":f_exp}))
+            values.append (simple_eval(proc["eq"], names=self.namehandler, functions={"exp":f_exp, "log":f_log}))
         
         print proc["eq"], "evaluated.", values
         return ProcResult(RetCode.OK, proc, values)
