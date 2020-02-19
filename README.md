@@ -21,7 +21,7 @@ FarmOS V2는 주식회사 지농에서 개발한 개방형 스마트팜 제어�
 FarmOS V2는 크게 3가지 모듈로 구성되어 있습니다. 
 
 * fui
-  웹기반 사용자 화면을 담당하는 모듈입니다. 사용방법과 관련해서는 [UI사용법문서](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS_%E1%84%86%E1%85%A2%E1%84%82%E1%85%B2%E1%84%8B%E1%85%A5%E1%86%AF_v1.0.pdf)를 참고하세요.
+  웹기반 사용자 화면을 담당하는 모듈입니다. 사용방법과 관련해서는 [UI사용법문서](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS%20V2%20%EB%A7%A4%EB%89%B4%EC%96%BC%20v1.0.pdf)를 참고하세요.
 
 * cvtgate
   장비와의 통신을 담당하는 모듈입니다. 표준 장비와 통신을 위해서 USB to RS485 컨버터를 사용하시는 경우 별도의 설정변경없이 사용이 가능합니다.  
@@ -75,6 +75,19 @@ sudo apt install -y nodejs
 
 * [python](http://python.org)
 python은 인터프리트형 고수준 언어로 다양한 영역의 어플리케이션을 제작하는데 활용되고 있습니다. 일반적인 리눅스 배포판에 디폴트로 설치되어 나오기 때문에 별도로 설치할 필요는 없습니다. 다만, 필요한 패키지들을 설치할 필요는 있습니다. 
+
+## 교육자료
+
+* [FarmOs V2 소개](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/Introduction%20to%20FarmOS%20V2.pdf)
+
+* [FarmOs Rule 생성](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/How%20to%20make%20a%20rule%20for%20FarmOS%20V2.pdf)
+
+* [FarmOs 설치](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOs%20V2%20%EC%84%A4%EC%B9%98.pdf)
+
+* [FarmOs 실습 장비](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS%20V2%20%EC%9E%A5%EB%B9%84%EC%A0%9C%EC%9E%91.pdf)
+
+* [FarmOs 실습 ](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS%20V2%20%EC%8B%A4%EC%8A%B5.pdf)
+
 
 ## 개발자
 
