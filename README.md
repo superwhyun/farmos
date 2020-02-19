@@ -80,13 +80,13 @@ python은 인터프리트형 고수준 언어로 다양한 영역의 어플리�
 
 * [FarmOs V2 소개](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/Introduction%20to%20FarmOS%20V2.pdf)
 
-* [FarmOs Rule 생성](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/How%20to%20make%20a%20rule%20for%20FarmOS%20V2.pdf)
+* [FarmOs V2 Rule 생성](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/How%20to%20make%20a%20rule%20for%20FarmOS%20V2.pdf)
 
-* [FarmOs 설치](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOs%20V2%20%EC%84%A4%EC%B9%98.pdf)
+* [FarmOs V2 설치](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOs%20V2%20%EC%84%A4%EC%B9%98.pdf)
 
-* [FarmOs 실습 장비](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS%20V2%20%EC%9E%A5%EB%B9%84%EC%A0%9C%EC%9E%91.pdf)
+* [FarmOs V2 실습 장비](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS%20V2%20%EC%9E%A5%EB%B9%84%EC%A0%9C%EC%9E%91.pdf)
 
-* [FarmOs 실습 ](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS%20V2%20%EC%8B%A4%EC%8A%B5.pdf)
+* [FarmOs V2 실습 ](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS%20V2%20%EC%8B%A4%EC%8A%B5.pdf)
 
 
 ## 개발자
