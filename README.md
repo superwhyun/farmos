@@ -2,9 +2,11 @@
 
 ## 소개
 
-FarmOS V2는 주식회사 지농에서 개발한 개방형 스마트팜 제어기 입니다. 기존에 개발되었던 Farmos(https://github.com/jinong-devteam/farmos) 의 문제점을 해결하고, 더 많은 연동장비를 지원합니다. 다양한 룰을 사용자가 직접 관리할 수 있어 유연한 스마트팜 구현이 가능합니다. 
+FarmOS V2는 [주식회사 지농](http://www.jinong.co.kr)에서 개발한 개방형 스마트팜 제어기 입니다. 기존에 개발되었던 Farmos(https://github.com/jinong-devteam/farmos) 의 문제점을 해결하고, 더 많은 연동장비를 지원합니다. 다양한 룰을 사용자가 직접 관리할 수 있어 유연한 스마트팜 구현이 가능합니다. 
 
 [FarmOS소개](https://youtu.be/zRmVyKhXcp0) 동영상을 참고하세요.
+
+[주식회사 지농](http://www.jinong.co.kr)은 농업기술전문기업으로 농업에 활용될 수 있는 다양한 IoT 장비들이 상호 연결가능한 체계를 만들고 이를 통해 서비스를 창출하여 우리나라 농업에 기여하고자 하는 회사입니다. 
 
 ## FarmOS의 비전
  * 현재 호환이 되지 않는 스마트팜 장비의 호환성을 높이고자 합니다. 
@@ -78,16 +80,24 @@ python은 인터프리트형 고수준 언어로 다양한 영역의 어플리�
 
 ## 교육자료
 
-* [FarmOs V2 소개](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/Introduction%20to%20FarmOS%20V2.pdf)
+* [FarmOS V2 소개](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/Introduction%20to%20FarmOS%20V2.pdf)
 
-* [FarmOs V2 Rule 생성](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/How%20to%20make%20a%20rule%20for%20FarmOS%20V2.pdf)
+* [FarmOS V2 설치](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/Installation%20of%20FarmOSV2.pdf)
 
-* [FarmOs V2 설치](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOs%20V2%20%EC%84%A4%EC%B9%98.pdf)
+* [FarmOS V2 실습 장비](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS%20V2%20%EC%9E%A5%EB%B9%84%EC%A0%9C%EC%9E%91.pdf)
 
-* [FarmOs V2 실습 장비](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS%20V2%20%EC%9E%A5%EB%B9%84%EC%A0%9C%EC%9E%91.pdf)
+* [FarmOS V2 Rule 생성](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/How%20to%20make%20a%20rule%20for%20FarmOS%20V2.pdf)
 
-* [FarmOs V2 실습 ](https://gitlab.com/JiNong_Public/farmosV2/-/blob/master/docs/FarmOS%20V2%20%EC%8B%A4%EC%8A%B5.pdf)
+## 연동가능한 장비 판매처
 
+| 업체명 | 구매가능장비 | 홈페이지 |
+|---|---|---|
+| 그린씨에스 | 양액기 | http://gcsmagma.com/ |
+| 유비엔 | 센서노드 / 구동기 노드 | http://www.ubncorp.kr/ |
+| KF농업개발 | 양액기 | https://m.blog.naver.com/PostList.nhn?blogId=kf0314 |
+| 코리아디지탈 | 센서노드 / 구동기노드 | http://www.koreadigital.com/ |
+
+* 가나다 순입니다.
 
 ## 개발자
 
