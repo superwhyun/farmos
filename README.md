@@ -59,7 +59,7 @@ FarmOS V2는 크게 3가지 모듈로 구성되어 있습니다.
 ## 의존성
 FarmOSV2의 구동을 위해서는 다음의 환경이 필요합니다. 
 * [mysql](https://www.mysql.com)
-mysql 은 대표적인 오픈소스 데이터베이스 입니다. 사용하는 OS에 따라 적절히 설치하면 됩니다. debian 계열의 Ubuntu나 Rasibian 등을 사용하는 경우에는 다음과 같이 설치할 수 있습니다.
+mysql 은 대표적인 오픈소스 데이터베이스 입니다. 사용하는 OS에 따라 적절히 설치하면 됩니다. debian 계열의 Ubuntu나 Rasibian 등을 사용하는 경우에는 다음과 같이 설치할 수 있습니다. mysql은 5.7버전을 추천합니다. 최신 버전의 경우 인증방식이 변경되어 접속에 문제가 생길 수 있습니다. 
 ```
 sudo apt install -y mysql-server
 ```
