@@ -4,6 +4,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 -- 루트 비밀번호 변경
 UPDATE mysql.user SET authentication_string=PASSWORD('farmosv2@') WHERE user='root'; 
+ALTER USER 'farmos'@'localhost' IDENTIFIED WITH mysql_native_password BY 'farmosv2@';
 
 -- 데이터베이스 생성
 CREATE database farmos;
