@@ -31,6 +31,7 @@ echo -e '\n\n 5. mysql check\n'
 which mysql
 if [ $? -eq 1 ];then
    echo -e "\n\n apt install mysql-server\n"; sudo apt install -y mysql-server 
+   echo -e "\n\n apt install mariadb-server\n"; sudo apt-get install -y mariadb-server 
    echo -e "\n\n systemctl start mysql\n"; sudo systemctl start mysql
    echo -e "\n\n systemctl enable mysql\n"; sudo systemctl enable mysql
 else
