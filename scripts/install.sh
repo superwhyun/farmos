@@ -26,6 +26,8 @@ echo -e '\n\n 4-5. pip install pymysql\n'; pip install pymysql
 echo -e '\n\n 4-6. pip install pymodbus\n'; pip install pymodbus
 echo -e '\n\n 4-7. pip install simpleeval\n'; pip install simpleeval
 echo -e '\n\n 4-8. pip install subprocess32\n'; pip install subprocess32
+echo -e '\n\n 4-9. apt-get install monit\n'; sudo apt-get install monit
+
 
 echo -e '\n\n 5. mysql check\n'
 which mysql
@@ -204,3 +206,32 @@ sudo /etc/init.d/cvtgate start
 sudo update-rc.d fui defaults
 sudo update-rc.d fcore defaults
 sudo update-rc.d cvtgate defaults
+
+
+echo -e '\n\n 15. monit service\n'
+
+
+echo "set mailserver smtp.gmail.com port 587 username "'"issue.jinong@gmail.com"'" password "'"password"'" using tlsv12 with timeout 30 seconds" | sudo tee -a /etc/monit/monitrc    
+echo "set alert service.jinong@gmail.com" | sudo tee -a /etc/monit/monitrc
+
+
+cat << "EOF" > "monitcvtgate"
+check process cpmng with pidfile /var/run/cpmng.pid
+    start = "/etc/init.d/cvtgate start"
+    stop = "/etc/init.d/cvtgate stop"
+EOF
+
+sudo mv monitcvtgate /etc/monit/conf.d/monitcvtgate
+
+
+cat << "EOF" > "monitfcore"
+check process fcore with pidfile /var/run/fcore.pid
+    start = "/etc/init.d/fcore start"
+    stop = "/etc/init.d/fcore stop"
+EOF
+
+sudo mv monitfcore /etc/monit/conf.d/monitfcore
+
+
+echo -e "\n\n sudo systemctl restart monit\n"; sudo systemctl restart monit
+
