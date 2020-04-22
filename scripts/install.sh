@@ -208,30 +208,4 @@ sudo update-rc.d fcore defaults
 sudo update-rc.d cvtgate defaults
 
 
-echo -e '\n\n 15. monit service\n'
-
-
-echo "set mailserver smtp.gmail.com port 587 username "'"issue.jinong@gmail.com"'" password "'"password"'" using tlsv12 with timeout 30 seconds" | sudo tee -a /etc/monit/monitrc    
-echo "set alert service.jinong@gmail.com" | sudo tee -a /etc/monit/monitrc
-
-
-cat << "EOF" > "monitcvtgate"
-check process cpmng with pidfile /var/run/cpmng.pid
-    start = "/etc/init.d/cvtgate start"
-    stop = "/etc/init.d/cvtgate stop"
-EOF
-
-sudo mv monitcvtgate /etc/monit/conf.d/monitcvtgate
-
-
-cat << "EOF" > "monitfcore"
-check process fcore with pidfile /var/run/fcore.pid
-    start = "/etc/init.d/fcore start"
-    stop = "/etc/init.d/fcore stop"
-EOF
-
-sudo mv monitfcore /etc/monit/conf.d/monitfcore
-
-
-echo -e "\n\n sudo systemctl restart monit\n"; sudo systemctl restart monit
 
