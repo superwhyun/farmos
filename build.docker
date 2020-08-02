@@ -1,0 +1,2 @@
+#docker rmi fcore:1.0
+docker build -f Dockerfile --tag fcore:1.0 .
