@@ -69,7 +69,7 @@ class Daemon:
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
-        self.pidfile = "/var/run/" + pname + ".pid"
+        self.pidfile = "./var/run/" + pname + ".pid"
         self.runner = runner
         self.isdaemon = False
         self.pname = pname
@@ -94,7 +94,7 @@ class Daemon:
                 # exit first parent
                 #sys.exit(0)
                 return False
-        except(OSError, e):
+        except OSError as e:
             self._logger.warning("fork #1 failed: %d (%s)\n" % (e.errno, e.strerror))
             sys.exit(1)
 
@@ -109,7 +109,7 @@ class Daemon:
             if pid > 0:
                 # exit from second parent
                 sys.exit(0)
-        except(OSError, e):
+        except OSError as e:
             self._logger.warning("fork #2 failed: %d (%s)\n" % (e.errno, e.strerror))
             sys.exit(1)
 
@@ -119,7 +119,7 @@ class Daemon:
         sys.stderr.flush()
         si = open(self.stdin, 'r')
         so = open(self.stdout, 'a+')
-        se = open(self.stderr, 'a+', 0)
+        se = open(self.stderr, 'a+')
         os.dup2(si.fileno(), sys.stdin.fileno())
         os.dup2(so.fileno(), sys.stdout.fileno())
         os.dup2(se.fileno(), sys.stderr.fileno())
@@ -130,7 +130,7 @@ class Daemon:
         open(self.pidfile, 'w+').write("%s\n" % pid)
         self.isdaemon = True
         formatter = logging.Formatter('[%(levelname)s|%(filename)s:%(lineno)s] %(asctime)s > %(message)s')
-        fileHandler = logging.handlers.RotatingFileHandler("/var/log/" + self.pname  + ".log", maxBytes=200000, backupCount=5)
+        fileHandler = logging.handlers.RotatingFileHandler("./var/log/" + self.pname  + ".log", maxBytes=200000, backupCount=5)
         fileHandler.setFormatter(formatter)
         self._logger.addHandler(fileHandler)
         return True
