@@ -203,7 +203,7 @@ class MBlock(object):
                 mblock.__class__ = Notice 
             return mblock
         except Exception as ex:
-            print "Fail to load a message.", ex
+            print("Fail to load a message.", ex)
             return None
 
 # OBSERVATION = 100  # { time: '2018-10-24 14:34:42', 1 : [123, StatCode], 2 : [456, StatCode]}
@@ -351,21 +351,21 @@ class Notice(MBlock):
 
 if __name__ == "__main__":
     blk = MBlock(10, BlkType.OBSERVATION, {1: 30})
-    print blk.getcontent()
-    print BlkType.isobservation(blk.gettype())
-    print BlkType.isrequest(blk.gettype())
-    print blk.get()
+    print(blk.getcontent())
+    print(BlkType.isobservation(blk.gettype()))
+    print(BlkType.isrequest(blk.gettype()))
+    print(blk.get())
 
     blk = Observation(10)
     blk.setobservation(1, 30)
     blk.setobservation(2, 40)
-    print blk.getcontent()
-    print BlkType.isobservation(blk.gettype())
-    print BlkType.isrequest(blk.gettype())
-    print blk.get()
+    print(blk.getcontent())
+    print(BlkType.isobservation(blk.gettype()))
+    print(BlkType.isrequest(blk.gettype()))
+    print(blk.get())
 
     blk = Request(10)
     blk.setcommand(1, 'on', {})
-    print blk.getdevid()
-    print blk.getcommand()
-    print blk.stringify()
+    print(blk.getdevid())
+    print(blk.getcommand())
+    print(blk.stringify())

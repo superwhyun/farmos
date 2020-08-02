@@ -94,7 +94,7 @@ class Daemon:
                 # exit first parent
                 #sys.exit(0)
                 return False
-        except OSError, e:
+        except(OSError, e):
             self._logger.warning("fork #1 failed: %d (%s)\n" % (e.errno, e.strerror))
             sys.exit(1)
 
@@ -109,7 +109,7 @@ class Daemon:
             if pid > 0:
                 # exit from second parent
                 sys.exit(0)
-        except OSError, e:
+        except(OSError, e):
             self._logger.warning("fork #2 failed: %d (%s)\n" % (e.errno, e.strerror))
             sys.exit(1)
 
@@ -117,9 +117,9 @@ class Daemon:
         # redirect standard file descriptors
         sys.stdout.flush()
         sys.stderr.flush()
-        si = file(self.stdin, 'r')
-        so = file(self.stdout, 'a+')
-        se = file(self.stderr, 'a+', 0)
+        si = open(self.stdin, 'r')
+        so = open(self.stdout, 'a+')
+        se = open(self.stderr, 'a+', 0)
         os.dup2(si.fileno(), sys.stdin.fileno())
         os.dup2(so.fileno(), sys.stdout.fileno())
         os.dup2(se.fileno(), sys.stderr.fileno())
@@ -127,7 +127,7 @@ class Daemon:
         # write pidfile
         atexit.register(self.delpid)
         pid = str(os.getpid())
-        file(self.pidfile, 'w+').write("%s\n" % pid)
+        open(self.pidfile, 'w+').write("%s\n" % pid)
         self.isdaemon = True
         formatter = logging.Formatter('[%(levelname)s|%(filename)s:%(lineno)s] %(asctime)s > %(message)s')
         fileHandler = logging.handlers.RotatingFileHandler("/var/log/" + self.pname  + ".log", maxBytes=200000, backupCount=5)
@@ -149,10 +149,10 @@ class Daemon:
         self._logger.warning("Check for a pidfile to see if the daemon already runs\n")
         self._logger.warning(self.pidfile + "\n")
         try:
-            pf = file(self.pidfile,'r')
+            pf = open(self.pidfile,'r')
             pid = int(pf.read().strip())
             pf.close()
-        except IOError:
+        except(IOError):
             pid = None
 
         if pid:
@@ -172,7 +172,7 @@ class Daemon:
 
         # Get the pid from the pidfile
         try:
-            pf = file(self.pidfile,'r')
+            pf = open(self.pidfile,'r')
             pid = int(pf.read().strip())
             pf.close()
         except IOError:
@@ -240,7 +240,7 @@ class Daemon:
 
 if __name__ == '__main__':  
     if len(sys.argv) != 2:
-        print "Usage : python daemon.py [start|stop|restart]"
+        print("Usage : python daemon.py [start|stop|restart]")
         sys.exit(2)
 
     mode = sys.argv[1]
@@ -253,7 +253,7 @@ if __name__ == '__main__':
     elif 'restart' == mode:
         daemon.restart()
     else:
-        print "Unknown command"
+        print("Unknown command")
         sys.exit(2)
     sys.exit(0)
 

@@ -53,7 +53,7 @@ class FCore(Runner):
             self._rules.process()
 
             tmp = self._option["sleep"] - (datetime.now() - tmp).total_seconds()
-            print "time left", tmp, self._option["sleep"]
+            print("time left", tmp, self._option["sleep"])
             if tmp > 0:
                 time.sleep(tmp)
             if debug:
@@ -64,7 +64,7 @@ class FCore(Runner):
     
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print "Usage : python fcore.py [start|stop|restart|run|debug]"
+        print("Usage : python fcore.py [start|stop|restart|run|debug]")
         sys.exit(2)
 
     mode = sys.argv[1]
@@ -81,6 +81,6 @@ if __name__ == '__main__':
     elif 'debug' == mode:
         adaemon.run(True)
     else:
-        print "Unknown command"
+        print("Unknown command")
         sys.exit(2)
     sys.exit(0)

@@ -82,11 +82,11 @@ class EquationProcessor(Processor):
         else:
             values.append (simple_eval(proc["eq"], names=self.namehandler, functions={"exp":f_exp, "log":f_log}))
         
-        print proc["eq"], "evaluated.", values
+        print(proc["eq"], "evaluated.", values)
         return ProcResult(RetCode.OK, proc, values)
 
     def namehandler(self, node):
-        print "#" + node.id, self._tmpdata["#" + node.id].gettsvalue(self._tsidx)
+        print("#" + node.id, self._tmpdata["#" + node.id].gettsvalue(self._tsidx))
         return self._tmpdata["#" + node.id].gettsvalue(self._tsidx)
 
 class ExternalProcessor(Processor): 
@@ -111,19 +111,19 @@ class ExternalProcessor(Processor):
     def evaluate(self, rule, proc, dbcur):
     	lines = subprocess32.check_output(self._makeargs(proc, rule["inputs"]), 
         	timeout=self._TIMEOUT, universal_newlines=True)
-        values = map(float, lines.split("\n"))
+    	values = map(float, lines.split("\n"))
 
-        return ProcResult(RetCode.OK, proc, values)
+    	return ProcResult(RetCode.OK, proc, values)
 
 if __name__ == '__main__':
     eqproc = EquationProcessor(util.getdefaultlogger())
-    print eqproc.evaluate({"field_id" : 1, "inputs": {"#bottomtemp0" : {"nvalue" : 0}, "#middletemp0": {"nvalue" : 0}, "#uptemp0": {"nvalue" : 0}, "#alc0" : {"nvalue" : 0}}}, {"type" : "eq", "eq": "0 if bottomtemp0 != 0 and middletemp0 != 0 else 1"}) 
+    print(eqproc.evaluate({"field_id" : 1, "inputs": {"#bottomtemp0" : {"nvalue" : 0}, "#middletemp0": {"nvalue" : 0}, "#uptemp0": {"nvalue" : 0}, "#alc0" : {"nvalue" : 0}}}, {"type" : "eq", "eq": "0 if bottomtemp0 != 0 and middletemp0 != 0 else 1"}) )
 
     mdproc = ModuleProcessor(util.getdefaultlogger())
-    print mdproc.evaluate({"field_id" : 1, "inputs": {"#bottomtemp1" : {"nvalue" : 10},
+    print(mdproc.evaluate({"field_id" : 1, "inputs": {"#bottomtemp1" : {"nvalue" : 10},
         "#middletemp1" : {"nvalue" : 11},
         "#uptemp1" : {"nvalue" : 12},
         "#secondtime" : {"nvalue" : int(time.time()) + 10},
         "#firsttime" : {"nvalue" : int(time.time()) - 10},
         "#diff1" : {"nvalue" : 10},
-        "#coldwork1" : {"nvalue" : 10}}}, {"type" : "mod", "mod": "iotrrw.coldwater", "outputs": ["#alert", "#coldwater"]})
+        "#coldwork1" : {"nvalue" : 10}}}, {"type" : "mod", "mod": "iotrrw.coldwater", "outputs": ["#alert", "#coldwater"]}) )

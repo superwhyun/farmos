@@ -75,7 +75,7 @@ if __name__ == '__main__':
     v = Variable()
     row = {'nvalue' : 3, 'obs_time' : datetime.now(), 'modified_time' : datetime.now()}
     v.setfromdb(row)
-    print "isupdatedtoday", v.isupdatedtoday()
-    print "getvalue", v.getvalue()
+    print("isupdatedtoday", v.isupdatedtoday())
+    print("getvalue", v.getvalue())
     v.setvalue(5)
-    print "gatvalue, getdiff", v.getvalue(), v.getdiff()
+    print("gatvalue, getdiff", v.getvalue(), v.getdiff())

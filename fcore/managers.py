@@ -58,7 +58,7 @@ class DataManager(Manager):
         iquery = "insert into observations(data_id, obs_time, nvalue) values (%s, %s, %s)"
         for dataid, variable in self._data.iteritems():
             if variable.isupdated():
-                print "writedata", dataid, variable
+                print("writedata", dataid, variable)
                 self._cur.execute(uquery, [variable.getvalue(), variable.getobserved(), variable.getmodified(), dataid])
                 self._cur.execute(iquery, [dataid, variable.getobserved(), variable.getvalue()])
         self._conn.commit()
@@ -91,7 +91,7 @@ class TimeSpanManager(Manager):
                     part["to"] = sunset - int(part["value"])
                 else:
                     part["to"] = int(part["to"])
-                print "update suntimespan", part
+                print("update suntimespan", part)
         return ts
 
     def updatetimespans(self):
@@ -104,7 +104,7 @@ class TimeSpanManager(Manager):
             self.updatesuntimespan(ts)
 
     def addtimespan(self, tsid, fldid, timespan):
-        print "addtimespan", tsid, fldid, timespan
+        print("addtimespan", tsid, fldid, timespan)
         self._timespans[(tsid, fldid)] = timespan
         if timespan["configuration"]["timing"] == "sun":
             self.updatesuntimespan(timespan)
@@ -140,7 +140,7 @@ class TimeSpanManager(Manager):
         idx = -1
         for i in range(len(timespan["parts"])):
             if timespan["parts"][i]["to"] > nsec:
-                print "found timespan index : ", i, timespan["parts"][i]["to"], nsec
+                print("found timespan index : ", i, timespan["parts"][i]["to"], nsec)
                 idx = i
                 break
 
@@ -167,7 +167,7 @@ class TimeSpanManager(Manager):
         timespan["tvar"]["tsidx"].setvalue(idx)
         for th in timespan["threshold"]:
             timespan["tvar"]["#" + th["id"]].setvalue(self.getthresholdvalue(timespan["parts"], th["timeoption"], idx, current))
-        print "thresholds", timespan["tvar"]
+        print("thresholds", timespan["tvar"])
         return timespan["tvar"]
 
 class DeviceManager(Manager):
@@ -184,10 +184,10 @@ class DeviceManager(Manager):
                     del self._devices[row["id"]]
             else:
                 self._devices[row["id"]] = row
-        print "devices ", self._devices
+        print("devices ", self._devices)
 
     def getdevice(self, devid):
-        print "getdevice", devid
+        print("getdevice", devid)
         return self._devices[devid]
 
 class RuleManager(Manager):
@@ -247,7 +247,7 @@ class RuleManager(Manager):
     def loadappliedrules(self, updated):
         self._timespan.loadtimespan(updated)
 
-        print "loadappliedrules", updated
+        print("loadappliedrules", updated)
         query = "select * from core_rule_applied where unix_timestamp(updated) >= %s"
         self._cur.execute(query, [updated])
         for row in self._cur.fetchall():
@@ -297,7 +297,7 @@ class RuleManager(Manager):
             kv[key] = self._data.getdata(did)
             kid[key] = did
 
-        print "rule inputs", kv
+        print("rule inputs", kv)
 
         ctrls = json.loads(row["controllers"])
         for proc in ctrls['processors']:
@@ -325,18 +325,18 @@ class RuleManager(Manager):
     def processrules(self):
         ret = []
         now = int(time.time())
-        print "now", now
+        print("now", now)
         for rules in self._rules:
             for rid, rule in rules.iteritems():
                 try:
-                    print "rule", rule["name"], rule["executed"]
+                    print("rule", rule["name"], rule["executed"])
                     if rule["executed"] + rule["inputs"]["period"].getvalue() < now:
                         self._logger.info(rule["name"] + " is executing.")
                         self.setinputdata(rule)
                         tmp = self.executerule(rule)
                         ret.append({"ruleid": rid, "result": tmp})
                         rule["executed"] = now
-                        print "rule executed ", rule["name"], rule["executed"]
+                        print("rule executed ", rule["name"], rule["executed"])
                     else:
                         self._logger.info(rule["name"] + " is waiting.")
                 except Exception as ex:
@@ -347,7 +347,7 @@ class RuleManager(Manager):
 
     def finddevid(self, rule, target):
         for dev in rule["constraints"]["devices"]:
-            print "dev", dev
+            print("dev", dev)
             if "outputs" in dev and dev["outputs"] == target:
                 return dev["deviceid"]
 
@@ -356,7 +356,7 @@ class RuleManager(Manager):
         for tmp in ret[1:]:
             if tmp.getretcode() == RetCode.OK:
                 for key, value in tmp.getoutputs().iteritems():
-                    print "rearrange result ", key, value
+                    print("rearrange result ", key, value)
                     newret[key] = value
         return newret
 
@@ -387,17 +387,17 @@ class RuleManager(Manager):
             if var is None:
                 self._logger.warn("Fail to find output : " + str(out["outputs"]))
             else:
-                print "data", dataid, out["outputs"], var.getvalue()
+                print("data", dataid, out["outputs"], var.getvalue())
                 self._data.updatedata(dataid, var.getvalue())
 
     def sendrequest(self, dev, cmd, params):
-        print "send req", dev["id"], cmd, params
+        print("send req", dev["id"], cmd, params)
         if dev and "nodeid" in dev and dev["nodeid"]:
             req = Request(dev["nodeid"]) 
             req.setcommand(dev["id"], cmd, params)
             topic = "/".join(["cvtgate", dev["coupleid"], str(dev["gateid"]), "req", str(dev["nodeid"])])
             ret = publish.single(topic, payload=req.stringify(), qos=2, hostname=self._option["mqtt"]["host"])
-            print "mqtt", ret, topic, req.stringify()
+            print("mqtt", ret, topic, req.stringify())
             return req
         else:
             self._logger.warn("Not enough infomation for a device.", dev)
@@ -409,10 +409,10 @@ class RuleManager(Manager):
 
         reqs = []
         for out in rule["outputs"]["req"]:
-            print "req1"
+            print("req1")
             cmd = newret[out["cmd"]].getvalue()
             if cmd is None:
-                print "cmd is None. Do not make a request."
+                print("cmd is None. Do not make a request.")
                 continue
 
             params = {}
@@ -424,7 +424,7 @@ class RuleManager(Manager):
                     pname = param[1:]
                 params[pname] = newret[param].getvalue()   # remove '#'
 
-            print "req2"
+            print("req2")
 
             for target in out["targets"]:
                 devid = self.finddevid(rule, target)
@@ -489,7 +489,7 @@ class RuleManager(Manager):
 
         # make output
         newret = self.rearrangeresult(ret)
-        print ret, newret
+        print(ret, newret)
 
         self.processdata(rule, ret, newret)
         reqs = self.processrequest(rule, ret, newret)

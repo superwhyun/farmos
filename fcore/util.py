@@ -81,4 +81,4 @@ class SunTime:
 
 if __name__ == '__main__':
     st = SunTime(128.856632, 37.798953)
-    print "rise", st.getsunrise(), "set", st.getsunset()
+    print("rise", st.getsunrise(), "set", st.getsunset())
