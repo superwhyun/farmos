@@ -8,7 +8,7 @@
 import sys
 import socket
 import select
-import queue
+import Queue
 import serial
 import logging
 import logging.handlers
@@ -153,7 +153,7 @@ class TCPServerConnection(Connection):
                     self._logger.info("connected from " + str(soc) + ", " + str(addr))
                     soc.setblocking(0)
                     self._inputs.append(soc)
-                    self._msgque[soc] = queue.Queue()
+                    self._msgque[soc] = Queue.Queue()
                        
                 else:
                     data = self._read(s, n)
@@ -164,7 +164,7 @@ class TCPServerConnection(Connection):
                 self._logger.info("writable " + str(s))
                 try:
                     next = self._msgque[s].get_nowait()
-                except queue.Empty:
+                except Queue.Empty:
                     self._outputs.remove(s)
                 else:
                     self._logger.info("sent " + str(s) + ", " + str(len(next)))
@@ -196,11 +196,11 @@ class SerialConnection(Connection):
         buf = self._serial.read(n+1)
         if len(buf) > 0:
             self._rbuf = self._rbuf + buf
-            print("read : ", end=' ')
-            print("[", end=' ')
+            print "read : ",
+            print "[",
             for ch in buf:
-                print(ord(ch), " ", end=' ')
-            print("]")
+                print ord(ch), " ",
+            print "]"
             return n - len(buf)
         raise ReadError("fail to read")
 
@@ -231,24 +231,24 @@ class ETXSerialConnection(SerialConnection):
                     break
 
     def realread(self, n):
-        print(n, "realread : ", end=' ')
+        print n, "realread : ",
         while n > 0:
             ch = self._serial.read(1)
             if len(ch) == 0:
                 raise ReadError("fail to read")
             if ch != self._option['ETX']:
                 self._rbuf = self._rbuf + ch
-                print(ch, end=' ')
+                print ch,
                 n = n - 1
             else:
-                print("[", ch, "]", end=' ')
+                print "[", ch, "]",
                 break
-        print("")
+        print ""
         return n
 
 if __name__ == "__main__":
     opt = {"port" : "/dev/ttyACM0", "baudrate": 9600, "type":"NUTRI"}
     sc = SerialConnection(opt, None)
     sc.open()
-    print(sc.read(10))
+    print sc.read(10)
     sc.close()

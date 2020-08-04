@@ -65,14 +65,14 @@ class FarmosMate(Mate):
         self.close()
 
     def writeblk(self, blk):
-        print("$$$$farmos  write message block.")
+        print "$$$$farmos  write message block."
         self._jnmqtt.writeblk(blk)
         self._farmosdb.writeblk(blk)
-        print("$$$$farmos  wrote message block.")
+        print "$$$$farmos  wrote message block."
 
     def onmsg(self, client, obj, blk):
-        print(("FarmosMate Received mblock '" + str(blk.payload) + "' on topic '"
-              + blk.topic + "' with QoS " + str(blk.qos)))
+        print("FarmosMate Received mblock '" + str(blk.payload) + "' on topic '"
+              + blk.topic + "' with QoS " + str(blk.qos))
 
         msg = self._jnmqtt.getpropermsg(blk)
         if msg is None:
@@ -90,9 +90,9 @@ class FarmosMate(Mate):
 
         if BlkType.isrequest(msg.gettype()):
             self._farmosdb.writeblk(msg)
-            print("farmosdb writeblk")
+            print "farmosdb writeblk"
             ret = self.writecb(msg)
-            print("writecb")
+            print "writecb"
         else:
             self._logger.warn("Wrong message : " + blk.payload)
 #        except Exception as ex:
@@ -123,9 +123,9 @@ if __name__ == "__main__":
     cmd.setcommand(12, 'on', {})
 
     publish.single("cvtgate/1/req/1", cmd.stringify(), hostname="dev.jinong.co.kr")
-    print("published")
+    print "published"
 
     time.sleep(5)
     mqttc.stop()
 
-    print("local tested.")
+    print "local tested."

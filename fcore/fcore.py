@@ -30,6 +30,7 @@ class FCore(Runner):
 
     def connect(self):
         copt = self._option["db"]
+        print(copt["user"])
         self._conn = pymysql.connect(host=copt["host"], user=copt["user"],
                          password=copt["password"], db=copt["db"], cursorclass=pymysql.cursors.DictCursor)
         self._cur = self._conn.cursor()
@@ -69,18 +70,24 @@ if __name__ == '__main__':
 
     mode = sys.argv[1]
     runner = FCore('../conf/fcore.json', util.getdefaultlogger())
-    adaemon = Daemon('fcore', runner)
-    if 'start' == mode:
-        adaemon.start()
-    elif 'stop' == mode:
-        adaemon.stop()
-    elif 'restart' == mode:
-        adaemon.restart()
-    elif 'run' == mode:
-        adaemon.run()
-    elif 'debug' == mode:
-        adaemon.run(True)
-    else:
-        print("Unknown command")
-        sys.exit(2)
-    sys.exit(0)
+    runner.initialize()
+    runner.run()
+    runner.finalize()
+
+
+
+    # adaemon = Daemon('fcore', runner)
+    # if 'start' == mode:
+    #     adaemon.start()
+    # elif 'stop' == mode:
+    #     adaemon.stop()
+    # elif 'restart' == mode:
+    #     adaemon.restart()
+    # elif 'run' == mode:
+    #     adaemon.run()
+    # elif 'debug' == mode:
+    #     adaemon.run(True)
+    # else:
+    #     print("Unknown command")
+    #     sys.exit(2)
+    # sys.exit(0)

@@ -46,7 +46,7 @@ class Mate(object):
         :param logger: 로깅을 위한 로거. 없다면 내부적으로 만듬.
         """
         self._option = option
-        print("mate initialized. ", option)
+        print "mate initialized. ", option
 
         self._coupleid = coupleid
         self._sleep = {"time": 3, "obs": 19, "noti": 19} if "sleep" not in option else option["sleep"]
@@ -106,7 +106,7 @@ class Mate(object):
     def writeblk(self, blk):
         """ 외부에서 데이터 전달을 위해 호출되는 메소드. """
         # external callback
-        print("###message : ", blk.get())
+        print "###message : ", blk.get()
 
     def readmsg(self):
         """ Mate가 메세지를 읽는 함수. 직접구현해야함.  """
@@ -132,7 +132,7 @@ class Mate(object):
         pass
 
     def run(self):
-        print("mate run ... sleep : ", self._sleep["time"])
+        print "mate run ... sleep : ", self._sleep["time"]
         scnt = 0
         while self.isexecuting():
             try:
@@ -163,7 +163,7 @@ class Mate(object):
                 except:
                     pass
 
-        print("mate stop")
+        print "mate stop"
 
 class ThreadMate(Mate):
     def __init__(self, option, devinfo, coupleid, logger=None):
@@ -191,7 +191,7 @@ if __name__ == "__main__":
     mate2 = Mate({}, [])
     mate2
     mate.start(mate2.writeblk)
-    print("mate started")
+    print "mate started"
     time.sleep(3)
     mate.stop()
-    print("mate stopped")
+    print "mate stopped"

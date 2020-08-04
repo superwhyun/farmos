@@ -63,8 +63,8 @@ class JNMQTTMate(Mate):
         self._jnmqtt.writeblk(blk)
 
     def onmsg(self, client, obj, blk):
-        print("JNMQTTMate Received mblock '" + str(blk.payload) + "' on topic '"
-              + blk.topic + "' with QoS " + str(blk.qos))
+        print(("JNMQTTMate Received mblock '" + str(blk.payload) + "' on topic '"
+              + blk.topic + "' with QoS " + str(blk.qos)))
 
         msg = self._jnmqtt.getpropermsg(blk)
         if msg is None:
@@ -111,9 +111,9 @@ if __name__ == "__main__":
     cmd.setcommand(12, 'on', {})
 
     publish.single("cvtgate/1/req/1", cmd.stringify(), hostname="dev.jinong.co.kr")
-    print "published"
+    print("published")
 
     time.sleep(5)
     mqttc.stop()
 
-    print "local tested."
+    print("local tested.")

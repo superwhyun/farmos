@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+    mysql:
+        image: mysql:8.0
+        restart: always
+        environment: 
+            MYSQL_DATABASE: 'db'
+            MYSQ_USER: 'whyun'
+            MYSQL_PASSWORD: 'wkdtjqdl'
+            MYSQL_ROOT_PASSWORD: 'wkdtjqdl'
+        ports:
+            - '3306:3306'
+        expose: 
+            - '3306'
+        cap_add: 
+            - SYS_NICE  # make silent on 'mbind: Operation not permitted'
+        volumes:
+            - db_volume:/var/lib/mysql
+            - ./conf/sql:/docker-entrypoint-initdb.d
+
+    mosquitto:
+        image: eclipse-mosquitto:1.6.10
+        restart: always
+        ports:
+            - '1883:1883'        
+        expose: 
+            - '1883'            
+        volumes:
+            - ./conf/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+volumes: 
+    db_volume:
+
+networks:
+    frontend:
+    backend:

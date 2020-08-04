@@ -91,7 +91,7 @@ class DevInfo(object):
         return devmap
 
     def isok(self):
-        if self._devinfo is not None and isinstance(self._devinfo, list) and len(self._devinfo) > 0 and "children" in self._devinfo[0]:
+        if self._devinfo is not None and isinstance(self._devinfo, (list,)) and len(self._devinfo) > 0 and "children" in self._devinfo[0]:
             return True
         return False
 
@@ -108,10 +108,10 @@ class DevInfo(object):
             for gw in self._devinfo:
                 for node in gw["children"]:
                     if str(node["id"]) == str(nodeid):
-                        print("found gateway", gw)
+                        print "found gateway", gw
                         return gw
         except Exception as ex:
-            print("Fail to find dev by id?", devid, one, ex)
+            print "Fail to find dev by id?", devid, one, ex
 
     def finddevbyid(self, devid, lst=None):
         """ 
@@ -131,7 +131,7 @@ class DevInfo(object):
                     if dev is not None:
                         return dev
         except Exception as ex:
-            print("Fail to find dev by id?", devid, one, ex)
+            print "Fail to find dev by id?", devid, one, ex
 
     def finddevbydevkey(self, devkey, dt, lst=None):
         """ 
@@ -152,7 +152,7 @@ class DevInfo(object):
                     if dev is not None:
                         return dev
         except Exception as ex:
-            print("Fail to find dev by devkey ?", devkey, dt, ex)
+            print "Fail to find dev by devkey ?", devkey, dt, ex
 
     def findid(self, devkey, dt, lst=None):
         dev = self.finddevbydevkey(devkey, dt, lst)
@@ -173,7 +173,7 @@ if __name__ == "__main__":
       ]}
     ])
 
-    print("findid", di.findid(0, "sen"))
+    print "findid", di.findid(0, "sen")
     time.sleep(3)
     mate.stop()
-    print("mate stopped")
+    print "mate stopped"

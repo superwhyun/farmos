@@ -116,10 +116,10 @@ if __name__ == "__main__":
     
     cal = Calibrator(option, None)
     if cal.calculate(1, 10) == 6:
-        print("test 1 - linear ok")
+        print "test 1 - linear ok"
     if cal.calculate(2, 610) == 135:
-        print("test 2 - case ok")
+        print "test 2 - case ok"
     if cal.calculate(3, 610) == 210:
-        print("test 3 - interpolation ok")
+        print "test 3 - interpolation ok"
     if cal.calculate(4, 610) == 610:
-        print("test 4 - no ok")
+        print "test 4 - no ok"

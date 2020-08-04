@@ -55,7 +55,7 @@ class KSX3267Mate(ThreadMate):
         self._startregister = 40001 if "start" not in option else option["start"]
 
     def detect_node(self, unit, registers):
-        print "detect_node", unit, registers
+        print("detect_node", unit, registers)
         compcode = registers[0]
         nodecode = registers[2]
         size = registers[4]
@@ -74,7 +74,7 @@ class KSX3267Mate(ThreadMate):
             return {"compcode" : compcode, "nodecode" : nodecode, "devcodes": res.registers}
 
     def detect_nutri(self, unit, registers):
-        print "detect_nutri", unit, registers
+        print("detect_nutri", unit, registers)
         compcode = registers[0]
         nodecode = registers[2]
         return {"compcode" : compcode, "nodecode" : nodecode}
@@ -103,7 +103,7 @@ class KSX3267Mate(ThreadMate):
     def readregister(self, addr, count, unit):
         with self._lock:
             time.sleep(KSX3267Mate._SLEEP)
-            print "read register", unit, addr, count
+            print("read register", unit, addr, count)
             return self._conn.read_holding_registers(addr, count, unit=unit)
 
     def detect(self):
@@ -157,7 +157,7 @@ class KSX3267Mate(ThreadMate):
                     detected[unit] = info
 
             noti.setkeyvalue("opid", self._detection["opid"])
-            print "noti", noti.stringify()
+            print("noti", noti.stringify())
             self.writecb(noti)
             time.sleep(0.1)
     
@@ -166,7 +166,7 @@ class KSX3267Mate(ThreadMate):
         if noti:
             noti.setkeyvalue("opid", self._detection["opid"])
             noti.setcontent(self._option["conn"]["port"][8:], detected)
-#for lid, info in detected.iteritems():
+#for lid, info in detected.items():
 #                noti.setcontent(lid, info)
             self.writecb(noti)
         self.setdetection(False)
@@ -261,7 +261,7 @@ class KSX3267Mate(ThreadMate):
         return ResCode.OK
 
     def writeblk(self, blk):
-        print "received message", blk.getdevid(), self._coupleid
+        print("received message", blk.getdevid(), self._coupleid)
         if BlkType.isrequest(blk.gettype()) is False:
             self._logger.warn("The message is not request. " + str(blk.gettype()))
             return False
@@ -273,10 +273,10 @@ class KSX3267Mate(ThreadMate):
         if blk.getdevid() == self._coupleid:
             params = blk.getparams()
             if cmd == CmdCode.DETECT_DEVICE:
-                print "detect device"
+                print("detect device")
                 code = self.startdetection(params, blk.getopid())
             elif cmd == CmdCode.CANCEL_DETECT:
-                print "cancel to detect device"
+                print("cancel to detect device")
                 code = self.canceldetection(params)
             else:
                 self._logger.warn("Unknown Error. " + str(blk) + ", " + str(dev))
@@ -324,7 +324,7 @@ class KSX3267Mate(ThreadMate):
                 val = values[idx]
             ret[nm] = val
             idx = idx + size
-        print "parsed", ret
+        print("parsed", ret)
         return ret
             
     def readinfofromdev(self, dev):
@@ -383,9 +383,9 @@ class KSX3267Mate(ThreadMate):
     def sendobservation(self, ndinfo):
         obsblk = Observation(ndinfo["id"])
         obsblk.setobservation(ndinfo["id"], 0, StatCode(ndinfo["nd"]["status"]))
-        for devid, info in ndinfo["sen"].iteritems():
+        for devid, info in list(ndinfo["sen"].items()):
             obsblk.setobservation(devid, info["value"], StatCode(info["status"]))
-        for devid, info in ndinfo["act"].iteritems():
+        for devid, info in list(ndinfo["act"].items()):
             obsblk.setobservation(devid, 0, StatCode(info["status"]))
 
         self.writecb(obsblk)
@@ -393,7 +393,7 @@ class KSX3267Mate(ThreadMate):
     def sendnoticeforactuatorstatus(self, ndinfo):
         blk = Notice(ndinfo["id"], NotiCode.ACTUATOR_STATUS, ndinfo["id"], ndinfo["nd"])
         self.writecb(blk)
-        for devid, info in ndinfo["act"].iteritems():
+        for devid, info in list(ndinfo["act"].items()):
             blk = Notice(ndinfo["id"], NotiCode.ACTUATOR_STATUS, devid, info)
             self.writecb(blk)
 
@@ -495,7 +495,7 @@ if __name__ == "__main__":
 
     mate = Mate ({}, [], "1", None)
     kdmate.start (mate.writeblk)
-    print "mate started"
+    print("mate started")
 
     time.sleep(10)
     req = Request(None)
@@ -532,4 +532,4 @@ if __name__ == "__main__":
 
     time.sleep(15)
     kdmate.stop()
-    print "mate stopped" 
+    print("mate stopped") 

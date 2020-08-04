@@ -80,7 +80,7 @@ class FarmosDB:
 
     def _writedata(self, time, nvalue, dataid):
         params = [time, nvalue, dataid]
-        print(FarmosDB._CUROBS_QUERY, params)
+        print FarmosDB._CUROBS_QUERY, params
         with self._lock:
             try:
                 self._cur.execute(FarmosDB._CUROBS_QUERY, params)
@@ -109,7 +109,7 @@ class FarmosDB:
     def writeobs(self, blk):
         content = blk.getcontent()
         tm = content.pop('time', None)
-        for devid, values in list(blk.getcontent().items()):
+        for devid, values in blk.getcontent().items():
             dev = self._devinfo.finddevbyid(devid)
             if dev is None:
                 self._logger.warn("There is no device : " + str(devid))
@@ -131,16 +131,16 @@ class FarmosDB:
         tm = content.pop("time")
         code = content.pop("code")
         if code == NotiCode.ACTUATOR_STATUS: # Actuator Status
-            for devid, noti in list(content.items()):
+            for devid, noti in content.items():
                 did = int(devid)
                 if did in self._lastopid and "status" in noti:
-                    print("lastopid ready", self._lastopid[did], noti["status"])
+                    print "lastopid ready", self._lastopid[did], noti["status"]
                     if noti["status"] == 0:
-                        print(FarmosDB._REQFIN_QUERY, [devid, self._lastopid[did]])
+                        print FarmosDB._REQFIN_QUERY, [devid, self._lastopid[did]]
                         self._cur.execute(FarmosDB._REQFIN_QUERY, [devid, self._lastopid[did]])
                         del self._lastopid[did]
 
-                for key, value in list(noti.items()):
+                for key, value in noti.items():
                     did = self.getdataid(devid, key)
                     if did:
                         self._writedata(tm, value, did)
@@ -151,28 +151,28 @@ class FarmosDB:
             pass
 
     def writeblk(self, blk):
-        print("farmosdb writeblk", blk.getcontent())
+        print "farmosdb writeblk", blk.getcontent()
         if BlkType.isobservation(blk.gettype()):
-            print("write obs")
+            print "write obs"
             self.writeobs(blk)
 
         elif BlkType.isrequest(blk.gettype()):
-            print("write req")
+            print "write req"
             content = blk.getcontent()
             if content["cmd"] >= CmdCode.DETECT_DEVICE:
-                print("detect device")
+                print "detect device"
             else:
                 if "param" not in content:
                     self._logger.warn("Request needs 'param' " + blk.stringify())
                     return False
                 
                 params = [content["opid"], content["id"], content["cmd"], json.dumps(content["param"])]
-                print("insert req", FarmosDB._REQINS_QUERY, params)
+                print "insert req", FarmosDB._REQINS_QUERY, params
                 with self._lock:
                     try:
                         did = int(content["id"])
                         if did in self._lastopid:
-                            print(FarmosDB._REQFIN_QUERY, [did, self._lastopid[did]])
+                            print FarmosDB._REQFIN_QUERY, [did, self._lastopid[did]]
                             self._cur.execute(FarmosDB._REQFIN_QUERY, [did, self._lastopid[did]])
                             del self._lastopid[did]
 
@@ -185,12 +185,12 @@ class FarmosDB:
                         self.connect()
 
         elif BlkType.isresponse(blk.gettype()):
-            print("write res")
+            print "write res"
             content = blk.getcontent()
             uquery = "update requests set status = %s, exectime = now() where opid = %s "
             params = [content["res"], content["opid"]]
             self._lastopid[int(content["id"])] = {content["opid"]}
-            print(FarmosDB._REQUPS_QUERY, params)
+            print FarmosDB._REQUPS_QUERY, params
             with self._lock:
                 try:
                     self._cur.execute(FarmosDB._REQUPS_QUERY, params)
@@ -201,7 +201,7 @@ class FarmosDB:
                     self.connect()
 
         elif BlkType.isnotice(blk.gettype()):
-            print("write noti")
+            print "write noti"
             self.writenoti(blk)
 
         else:
@@ -209,9 +209,9 @@ class FarmosDB:
             self._logger.warn("wrong type messsage : " + blk.stringify())
             return False
 
-        print("finish writing block.")
-        print("finish writing block.")
-        print("finish writing block.")
+        print "finish writing block."
+        print "finish writing block."
+        print "finish writing block."
 
         return True
 

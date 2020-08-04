@@ -68,7 +68,7 @@ class CDTPMate(ThreadMate):
         try:
             node = self._devinfo.finddev(noti["SNID"], DevType.NODE)
             obsblk = Observation(node["id"])
-            for k, v in noti["observations"].iteritems():
+            for k, v in noti["observations"].items():
                 sid = self._devinfo.findid(k, DevType.SENSOR, node['children'])
                 if sid is None:
                     self._logger.warn("fail to find id. " + str(k))

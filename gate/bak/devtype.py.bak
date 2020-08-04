@@ -139,6 +139,6 @@ class DevType:
         if DevType.isgateway(devtype) and cmdcode in [CmdCode.DETECT_DEVICE, CmdCode.CANCEL_DETECT, CmdCode.DAEMON_RESTART]: #, CmdCode.UPDATE_SPEC]:
             return True
 
-        print(("It's not a proper command[" + str(cmdcode) + "] for " + str(devtype)))
+        print("It's not a proper command[" + str(cmdcode) + "] for " + str(devtype))
         return False
 

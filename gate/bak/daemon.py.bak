@@ -94,7 +94,7 @@ class Daemon:
                 # exit first parent
                 #sys.exit(0)
                 return False
-        except OSError as e:
+        except OSError, e:
             self._logger.warning("fork #1 failed: %d (%s)\n" % (e.errno, e.strerror))
             sys.exit(1)
 
@@ -109,7 +109,7 @@ class Daemon:
             if pid > 0:
                 # exit from second parent
                 sys.exit(0)
-        except OSError as e:
+        except OSError, e:
             self._logger.warning("fork #2 failed: %d (%s)\n" % (e.errno, e.strerror))
             sys.exit(1)
 
@@ -240,7 +240,7 @@ class Daemon:
 
 if __name__ == '__main__':  
     if len(sys.argv) != 2:
-        print("Usage : python daemon.py [start|stop|restart]")
+        print "Usage : python daemon.py [start|stop|restart]"
         sys.exit(2)
 
     mode = sys.argv[1]
@@ -253,7 +253,7 @@ if __name__ == '__main__':
     elif 'restart' == mode:
         daemon.restart()
     else:
-        print("Unknown command")
+        print "Unknown command"
         sys.exit(2)
     sys.exit(0)
 

@@ -11,11 +11,10 @@ import importlib
 import json
 import requests
 import os
-from queue import Queue
+from Queue import Queue
 from daemon import Daemon, Runner
 from mate import Mate
 from mblock import MBlock, BlkType
-import util
 
 class CoupleManager(Runner):
     _couples = []
@@ -24,10 +23,9 @@ class CoupleManager(Runner):
     # 경로 설정
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-    def __init__(self, configfile, logger):
+    def __init__(self, configfile):
         fp = open(configfile, 'r')
         self._option = json.loads(fp.read())
-        self._logger = logger
         fp.close()
         if 'sleep' not in self._option:
             self._option['sleep'] = 1
@@ -128,11 +126,11 @@ class CoupleManager(Runner):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print("Usage : python couplemanager.py [start|stop|restart|run]")
+        print "Usage : python couplemanager.py [start|stop|restart|run]"
         sys.exit(2)
 
     mode = sys.argv[1]
-    runner = CoupleManager('../conf/cpmng.conf', util.getdefaultlogger())
+    runner = CoupleManager('../conf/cpmng.conf')
     runner.initialize()
     runner.run()
     runner.finalize()    

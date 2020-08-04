@@ -12,11 +12,20 @@ import random
 import datetime
 from enum import IntEnum
 
+"""
+MEnum 은 IntEnum을 상속한 클래스
+"""
 class MEnum(IntEnum):
     @classmethod
     def has_value(cls, value):
+        """
+        특정값이 있는지 확인하는 멤버 함수
+        """
         return value in cls._value2member_map_
 
+"""
+메세지의 타입을 정의하는 MEnum 클래스
+"""
 class BlkType(MEnum):
     NONE = 0
     OBSERVATION = 100  # { time: '2018-10-24 14:34:42', 1 : 123, 2 :456 }
@@ -28,32 +37,56 @@ class BlkType(MEnum):
 
     @staticmethod
     def isobservation(blktype):
+        """
+        관측치 타입인지를 확인하는 메소드
+        """
         return BlkType.OBSERVATION <= blktype and blktype < BlkType.REQUEST
 
     @staticmethod
     def isrequest(blktype):
+        """
+        요청 타입인지를 확인하는 메소드
+        """
         return BlkType.REQUEST <= blktype and blktype < BlkType.RESPONSE
 
     @staticmethod
     def isresponse(blktype):
+        """
+        응답 타입인지를 확인하는 메소드
+        """
         return BlkType.RESPONSE <= blktype and blktype < BlkType.STATUS
 
     @staticmethod
     def isstatus(blktype):
+        """
+        상태 타입인지를 확인하는 메소드
+        """
         return BlkType.STATUS <= blktype and blktype < BlkType.NOTICE
 
     @staticmethod
     def isnotice(blktype):
+        """
+        노티스 타입인지를 확인하는 메소드
+        """
         return BlkType.NOTICE <= blktype and blktype < BlkType.UNDEFINED
 
     @staticmethod
     def isnotrequest(blktype):
+        """
+        요청 타입이 아닌지를 확인하는 메소드
+        """
         return BlkType.isobservation(blktype) or (BlkType.RESPONSE <= blktype and blktype < BlkType.UNDEFINED)
 
     @staticmethod
     def isundefined(blktype):
+        """
+        정의되지 않은 타입인지를 확인하는 메소드
+        """
         return BlkType.UNDEFINED <= blktype
 
+"""
+응답코드에 대한 MEnum 클래스
+"""
 class ResCode(MEnum):
     OK = 0
     FAIL = 1
@@ -63,6 +96,9 @@ class ResCode(MEnum):
     FAIL_TO_WRITE = 104
     #
 
+"""
+상태코드에 대한 MEnum 클래스
+"""
 class StatCode(MEnum):
     READY = 0    # OK, NORMAL
     ERROR = 1     # ABNORMAL
@@ -72,7 +108,8 @@ class StatCode(MEnum):
     ERROR_TEMPERATURE = 5
 
     NEEDTOCHANGE = 101
-    NEEDTOCALIBRATION = 102
+    NEEDTOCALIBRATE = 102
+    NEEDTOCHECK = 103
 
     WORKING = 201
     OPENNING = 301
@@ -82,6 +119,11 @@ class StatCode(MEnum):
     SUPPLYING = 402
     STOPPING = 403
 
+    ABNORMALVALUE = 901
+
+"""
+명령코드에 대한 MEnum 클래스
+"""
 class CmdCode(MEnum):
     OFF = 0                 # STOP
     RESET = 1               # REBOOT
@@ -109,6 +151,8 @@ class CmdCode(MEnum):
 
     @staticmethod
     def getparams(cmdcode):
+        """
+        """
         _params = {
             CmdCode.TIMED_ON : ["hold-time"],
             CmdCode.DIRECTIONAL_ON : ["time", "ratio"],
@@ -125,6 +169,9 @@ class CmdCode(MEnum):
         else:
             return []
 
+"""
+노티코드에 대한 MEnum 클래스
+"""
 class NotiCode(MEnum):
     DETECT_NODE_STARTED = 101              # 노드 탐색을 시작함
     DETECT_NODE_DETECTED = 102             # 노드가 탐색됨
@@ -145,6 +192,9 @@ class NotiCode(MEnum):
 
     NODE_CONNECTED = 501                   # 다양한 노티코드 필요할 수 있음
 
+"""
+메세지 블럭 클래스
+"""
 class MBlock(object):
     def __init__(self, nid, blktype, content, exkey=None, extra=None):
         self._nid = nid
@@ -203,7 +253,7 @@ class MBlock(object):
                 mblock.__class__ = Notice 
             return mblock
         except Exception as ex:
-            print("Fail to load a message.", ex)
+            print "Fail to load a message.", ex
             return None
 
 # OBSERVATION = 100  # { time: '2018-10-24 14:34:42', 1 : [123, StatCode], 2 : [456, StatCode]}
@@ -351,21 +401,21 @@ class Notice(MBlock):
 
 if __name__ == "__main__":
     blk = MBlock(10, BlkType.OBSERVATION, {1: 30})
-    print(blk.getcontent())
-    print(BlkType.isobservation(blk.gettype()))
-    print(BlkType.isrequest(blk.gettype()))
-    print(blk.get())
+    print blk.getcontent()
+    print BlkType.isobservation(blk.gettype())
+    print BlkType.isrequest(blk.gettype())
+    print blk.get()
 
     blk = Observation(10)
     blk.setobservation(1, 30)
     blk.setobservation(2, 40)
-    print(blk.getcontent())
-    print(BlkType.isobservation(blk.gettype()))
-    print(BlkType.isrequest(blk.gettype()))
-    print(blk.get())
+    print blk.getcontent()
+    print BlkType.isobservation(blk.gettype())
+    print BlkType.isrequest(blk.gettype())
+    print blk.get()
 
     blk = Request(10)
     blk.setcommand(1, 'on', {})
-    print(blk.getdevid())
-    print(blk.getcommand())
-    print(blk.stringify())
+    print blk.getdevid()
+    print blk.getcommand()
+    print blk.stringify()

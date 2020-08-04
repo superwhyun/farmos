@@ -95,7 +95,7 @@ class JNMQTT:
             self._client.loop_stop()
 
     def writeblk(self, blk):
-        print("**jnmqtt writeblk", blk.stringify())
+        print "**jnmqtt writeblk", blk.stringify()
         value = blk.stringify()
         inter = JNMQTT._SELF if blk.getnodeid() is None else ""
         node = "" if blk.getnodeid() is None else str(blk.getnodeid())
@@ -131,7 +131,7 @@ class JNMQTT:
         with self._lock:
             #ret = self._client.publish("/".join(lst), value, qos)
             ret = publish.single("/".join(lst), payload=value, qos=qos, hostname=self._option["conn"]["host"])
-            print("publish : ", "/".join(lst), ret, qos, value)
+            print "publish : ", "/".join(lst), ret, qos, value
 
     def nodesubscribe(self, tstr, qos):
         lst = [self._svc, "", tstr, ""]
@@ -210,9 +210,9 @@ if __name__ == "__main__":
     cmd.setcommand(12, 'on', {})
 
     publish.single("cvtgate/1/req/10", cmd.stringify(), hostname="dev.jinong.co.kr")
-    print("published")
+    print "published"
 
     time.sleep(5)
     mqttc.stop()
 
-    print("tested.")
+    print "tested."

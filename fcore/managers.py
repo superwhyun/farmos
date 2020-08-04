@@ -56,7 +56,7 @@ class DataManager(Manager):
     def writedata(self):
         uquery = "update current_observations set nvalue = %s, obs_time = %s, modified_time = %s where data_id = %s"
         iquery = "insert into observations(data_id, obs_time, nvalue) values (%s, %s, %s)"
-        for dataid, variable in self._data.iteritems():
+        for dataid, variable in self._data.items():
             if variable.isupdated():
                 print("writedata", dataid, variable)
                 self._cur.execute(uquery, [variable.getvalue(), variable.getobserved(), variable.getmodified(), dataid])
@@ -100,7 +100,7 @@ class TimeSpanManager(Manager):
 
         # It needs to recalculate once a day.
         self._day = time.localtime(time.time()).tm_yday
-        for tmp, ts in self._timespans.iteritems():
+        for tmp, ts in self._timespans.items():
             self.updatesuntimespan(ts)
 
     def addtimespan(self, tsid, fldid, timespan):
@@ -319,7 +319,7 @@ class RuleManager(Manager):
         }
 
     def setinputdata(self, rule):
-        for key, did in rule["_inputs"].iteritems():
+        for key, did in rule["_inputs"].items():
             rule["inputs"][key] = self._data.getdata(did)
         
     def processrules(self):
@@ -327,7 +327,7 @@ class RuleManager(Manager):
         now = int(time.time())
         print("now", now)
         for rules in self._rules:
-            for rid, rule in rules.iteritems():
+            for rid, rule in rules.items():
                 try:
                     print("rule", rule["name"], rule["executed"])
                     if rule["executed"] + rule["inputs"]["period"].getvalue() < now:
@@ -355,7 +355,7 @@ class RuleManager(Manager):
         newret = {}
         for tmp in ret[1:]:
             if tmp.getretcode() == RetCode.OK:
-                for key, value in tmp.getoutputs().iteritems():
+                for key, value in tmp.getoutputs().items():
                     print("rearrange result ", key, value)
                     newret[key] = value
         return newret

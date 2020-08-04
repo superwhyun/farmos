@@ -15,7 +15,6 @@ import paho.mqtt.publish as publish
 from mate import Mate
 from mblock import MBlock, BlkType, ResCode, StatCode, Request, Observation, NotiCode 
 from jnmqtt import JNMQTT
-from farmosdb import FarmosDB
 from dinfo import DevInfo
 
 '''
@@ -35,44 +34,37 @@ devinfo : [
 ]
 '''
 
-class FarmosMate(Mate):
+class JNMQTTMate(Mate):
+
     def __init__(self, option, devinfo, coupleid, logger):
         self._jnmqtt = JNMQTT(option, DevInfo(devinfo), logger)
-        self._farmosdb = FarmosDB(option, DevInfo(devinfo), logger)
-        super(FarmosMate, self).__init__(option, devinfo, coupleid, logger)
+        super(JNMQTTMate, self).__init__(option, devinfo, coupleid, logger)
 
     def connect(self):
         self._jnmqtt.connect(True)
-        self._farmosdb.connect()
-        super(FarmosMate, self).connect()
+        super(JNMQTTMate, self).connect()
         return True
 
     def close(self):
         self._jnmqtt.close()
-        self._farmosdb.close()
-        super(FarmosMate, self).close()
+        super(JNMQTTMate, self).close()
 
     def start(self, writecb):
         self._jnmqtt.start(self.onmsg)
-        self._farmosdb.start()
-        super(FarmosMate, self).start(writecb)
+        super(JNMQTTMate, self).start(writecb)
         self.connect()
 
     def stop(self):
         self._jnmqtt.stop()
-        self._farmosdb.stop()
-        super(FarmosMate, self).stop()
+        super(JNMQTTMate, self).stop()
         self.close()
 
     def writeblk(self, blk):
-        print("$$$$farmos  write message block.")
         self._jnmqtt.writeblk(blk)
-        self._farmosdb.writeblk(blk)
-        print("$$$$farmos  wrote message block.")
 
     def onmsg(self, client, obj, blk):
-        print(("FarmosMate Received mblock '" + str(blk.payload) + "' on topic '"
-              + blk.topic + "' with QoS " + str(blk.qos)))
+        print("JNMQTTMate Received mblock '" + str(blk.payload) + "' on topic '"
+              + blk.topic + "' with QoS " + str(blk.qos))
 
         msg = self._jnmqtt.getpropermsg(blk)
         if msg is None:
@@ -89,10 +81,7 @@ class FarmosMate(Mate):
                 self._logger.warn("The server might have some problems.")
 
         if BlkType.isrequest(msg.gettype()):
-            self._farmosdb.writeblk(msg)
-            print("farmosdb writeblk")
             ret = self.writecb(msg)
-            print("writecb")
         else:
             self._logger.warn("Wrong message : " + blk.payload)
 #        except Exception as ex:
@@ -101,7 +90,6 @@ class FarmosMate(Mate):
 if __name__ == "__main__":
     option = {
         "conn" : {"host" : "dev.jinong.co.kr", "port" : 1883, "keepalive" : 60},
-        "db" : {"host": "localhost", "user": "root", "password": "jinong1234%", "db": "open"},
         "mqtt" : {"svc" : "cvtgate", "id" : "1"},
         "area" : "local"
     }
@@ -115,17 +103,17 @@ if __name__ == "__main__":
         ]}
     ]
 
-    mqttc = FarmosMate(option, devinfo, "1", None)
-    mate = Mate({}, [], "1", None)
+    mqttc = JNMQTTMate(option, devinfo, None)
+    mate = Mate({}, [], None)
     mqttc.start(mate.writeblk)
 
     cmd = Request(1, None)
     cmd.setcommand(12, 'on', {})
 
     publish.single("cvtgate/1/req/1", cmd.stringify(), hostname="dev.jinong.co.kr")
-    print("published")
+    print "published"
 
     time.sleep(5)
     mqttc.stop()
 
-    print("local tested.")
+    print "local tested."

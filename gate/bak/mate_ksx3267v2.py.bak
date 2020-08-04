@@ -58,7 +58,7 @@ class KSX3267MateV2(ThreadMate):
         self._logger.info("KSX3267MateV2 Started.")
 
     def detect_node(self, conn, unit, registers):
-        print("detect_node", unit, registers)
+        print "detect_node", unit, registers
         compcode = registers[0]
         nodecode = registers[2]
         size = registers[4]
@@ -101,10 +101,10 @@ class KSX3267MateV2(ThreadMate):
         return ResCode.OK
 
     def readregister(self, conn, addr, count, unit):
-        print("....... before lock for read")
+        print "....... before lock for read"
         with self._lock:
             time.sleep(KSX3267MateV2._SLEEP)
-            print("read register", unit, addr, count)
+            print "read register", unit, addr, count
             try:
                 return conn.read_holding_registers(addr, count, unit=unit)
             except Exception as ex:
@@ -113,7 +113,7 @@ class KSX3267MateV2(ThreadMate):
 
     def detect(self):
         detected = {}
-        for port, conn in list(self._conn.items()):
+        for port, conn in self._conn.items():
             if self._isdetecting == False or self.isexecuting() == False:
                 self._logger.info("Total detection is canceled.")
                 break
@@ -124,7 +124,7 @@ class KSX3267MateV2(ThreadMate):
         noti = Notice(None, NotiCode.DETECT_FINISHED) # Detection Started
         if noti:
             noti.setkeyvalue("opid", self._detection["opid"])
-            for port, info in list(detected.items()):
+            for port, info in detected.items():
                 noti.setcontent(port, info)
             self.writecb(noti)
         self.setdetection(False)
@@ -186,7 +186,7 @@ class KSX3267MateV2(ThreadMate):
                     detected[unit] = info
 
             noti.setkeyvalue("opid", self._detection["opid"])
-            print("noti", noti.stringify())
+            print "noti", noti.stringify()
             self.writecb(noti)
             time.sleep(0.1)
     
@@ -289,7 +289,7 @@ class KSX3267MateV2(ThreadMate):
         self._conn[port].close()
 
     def close(self):
-        for port in list(self._conn.keys()):
+        for port in self._conn.keys():
             self.closeone(port)
         super(KSX3267MateV2, self).close()
 
@@ -337,10 +337,10 @@ class KSX3267MateV2(ThreadMate):
             #    self._logger.warn("This param is needed for this operation. " + str(params['operation']) + ", " + str(key))
             #    return ResCode.FAIL_WRONG_KEYWORD
 
-        print("....... befor lock for write")
+        print "....... befor lock for write"
         with self._lock:
             time.sleep(KSX3267MateV2._SLEEP)
-            print("....... lock for write", self.getdk(dev, 3), registers)
+            print "....... lock for write", self.getdk(dev, 3), registers
             res = self._conn[gw["dk"]].write_registers(self.getdk(dev, 3), registers, unit=unit)
 
         if res.isError():
@@ -355,7 +355,7 @@ class KSX3267MateV2(ThreadMate):
         return ResCode.OK
 
     def writeblk(self, blk):
-        print("received message", blk.getdevid(), self._coupleid)
+        print "received message", blk.getdevid(), self._coupleid
         if BlkType.isrequest(blk.gettype()) is False:
             self._logger.warn("The message is not request. " + str(blk.gettype()))
             return False
@@ -368,10 +368,10 @@ class KSX3267MateV2(ThreadMate):
         if blk.getdevid() == self._coupleid:
             params = blk.getparams()
             if cmd == CmdCode.DETECT_DEVICE:
-                print("detect device")
+                print "detect device"
                 code = self.startdetection(params, blk.getopid())
             elif cmd == CmdCode.CANCEL_DETECT:
-                print("cancel to detect device")
+                print "cancel to detect device"
                 code = self.canceldetection(params)
             else:
                 self._logger.warn("Unknown Error. " + str(blk) + ", " + str(dev))
@@ -416,7 +416,7 @@ class KSX3267MateV2(ThreadMate):
                 val = values[idx]
             ret[nm] = val
             idx = idx + size
-        print("parsed", ret)
+        print "parsed", ret
         return ret
             
     def readinfofromdev(self, conn, dev):
@@ -513,7 +513,7 @@ class KSX3267MateV2(ThreadMate):
         obsblk = Observation(ndinfo["id"])
         obsblk.setobservation(ndinfo["id"], 0, StatCode(ndinfo["nd"]["status"]))
 
-        for devid, info in list(ndinfo["sen"].items()):
+        for devid, info in ndinfo["sen"].items():
             if StatCode.has_value(info["status"]) == False:
                 info["status"] = StatCode.ERROR.value
             obsblk.setobservation(devid, info["value"], StatCode(info["status"]))
@@ -528,7 +528,7 @@ class KSX3267MateV2(ThreadMate):
 
     def sendnoticeforactuatorstatus(self, ndinfo):
         blk = Notice(ndinfo["id"], NotiCode.ACTUATOR_STATUS, ndinfo["id"], ndinfo["nd"])
-        for devid, info in list(ndinfo["act"].items()):
+        for devid, info in ndinfo["act"].items():
             blk.setcontent(devid, info)
         self.writecb(blk)
 
@@ -633,14 +633,14 @@ if __name__ == "__main__":
 
     mate = Mate ({}, [], "1", None)
     kdmate.start (mate.writeblk)
-    print("mate started")
+    print "mate started"
 
     time.sleep(10)
     req = Request(None)
     req.setcommand("1", CmdCode.DETECT_DEVICE, None)
-    print("=======================================#1")
+    print "=======================================#1"
     kdmate.writeblk(req)
-    print("=======================================#1")
+    print "=======================================#1"
 
     """
     time.sleep(1)
@@ -693,4 +693,4 @@ if __name__ == "__main__":
 
     time.sleep(30)
     kdmate.stop()
-    print("mate stopped") 
+    print "mate stopped" 
