@@ -1,7 +1,8 @@
 version: "3.8"
 services:
     svc_mysql:
-        image: mysql:5.7
+#        image: mysql:5.7 #amd64
+        image: jsurf/rpi-mariadb #for raspberry pi
         container_name: farmos-mysql
         restart: always
         environment: 
@@ -19,10 +20,8 @@ services:
             - SYS_NICE  # make silent on 'mbind: Operation not permitted'
         volumes:
             - db_volume:/var/lib/mysql
+            #- ./conf/sql/:/init # just for debugging
             - ./conf/sql/:/docker-entrypoint-initdb.d/
-            # - ./conf/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
-        # command:
-        #     - /docker-entrypoint-initdb.d/initdb.sh
 
 
     svc_mosquitto:

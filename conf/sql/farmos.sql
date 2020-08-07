@@ -1,20 +1,20 @@
--- 
+#
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
--- 데이터베이스 생성
+#데이터베이스 생성
 CREATE database IF NOT EXISTS farmos;
 
--- 사용자 생성
+#사용자 생성
 CREATE USER 'farmos'@'%' IDENTIFIED BY 'farmosv2@';
 GRANT ALL PRIVILEGES ON farmos.* TO 'farmos'@'%';
 FLUSH PRIVILEGES; 
 
 USE farmos;
 
--- ----------------------------
--- Table structure for configuration
--- ----------------------------
+#----------------------------
+#Table structure for configuration
+#----------------------------
 DROP TABLE IF EXISTS `configuration`;
 CREATE TABLE `configuration` (
   `lastupdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -22,9 +22,9 @@ CREATE TABLE `configuration` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- ----------------------------
--- Table structure for farm
--- ----------------------------
+#----------------------------
+#Table structure for farm
+#----------------------------
 DROP TABLE IF EXISTS `farm`;
 CREATE TABLE `farm` (
   `id` int(11) NOT NULL,
@@ -33,16 +33,16 @@ CREATE TABLE `farm` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of farm
--- ----------------------------
+#----------------------------
+#Records of farm
+#----------------------------
 BEGIN;
 INSERT INTO `farm` VALUES (1, '기본 농장', '{\"telephone\":\"0313601970\",\"gps\":\"37.397962970070104,126.93206214966011\",\"address\":\"경기 안양시 동안구 관악대로 69\",\"postcode\":\"13956\"}');
 COMMIT;
 
--- ----------------------------
--- Table structure for fields
--- ----------------------------
+#----------------------------
+#Table structure for fields
+#----------------------------
 DROP TABLE IF EXISTS `fields`;
 CREATE TABLE `fields` (
   `id` int(11) NOT NULL,
@@ -56,17 +56,17 @@ CREATE TABLE `fields` (
   CONSTRAINT `fk_fields_farm_1` FOREIGN KEY (`farm_id`) REFERENCES `farm` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of fields
--- ----------------------------
+#----------------------------
+#Records of fields
+#----------------------------
 BEGIN;
 INSERT INTO `fields` VALUES (0, 1, '온실외부', 'local', '{\"index\":{\"local\":{\"isFull\":true,\"idfmt\":{\"device\":\"\",\"data\":\"\"},\"max\":\"max\",\"device\":{},\"data\":[]},\"greenhouse\":{\"isFull\":true,\"idfmt\":{\"device\":\"\",\"data\":\"\"},\"max\":\"max\",\"device\":{},\"data\":[]},\"actuator\":{\"isFull\":true,\"idfmt\":{\"device\":\"\",\"data\":\"\"},\"max\":\"max\",\"device\":{},\"data\":[]}},\"dashboard\":{\"temp\":{\"idfmt\":{\"device\":\"1[0-9][0-9][0-9][0-9][0-9][0-9]1\",\"data\":\"\"},\"max\":2,\"device\":{},\"data\":[],\"isFull\":false},\"ventilation\":{\"idfmt\":{\"device\":\"\",\"data\":\"\"},\"max\":1,\"device\":{},\"data\":[],\"isFull\":false},\"heating\":{\"idfmt\":{\"device\":\"\",\"data\":\"\"},\"max\":1,\"device\":{},\"data\":[],\"isFull\":false},\"retractable\":{\"max\":5,\"idfmt\":{\"device\":\"1[0-9][0-9][0-9][0-9][0-9][0-9]2\",\"data\":\"\"},\"device\":{\"14\":[],\"18\":[]},\"data\":[],\"isFull\":false},\"switch\":{\"max\":5,\"idfmt\":{\"device\":\"1[0-9][0-9][0-9][0-9][0-9][0-9]4\",\"data\":\"\"},\"device\":{\"22\":[]},\"data\":[],\"isFull\":false}}}', 0);
 COMMIT;
 
 
--- ----------------------------
--- Table structure for core_rule_applied
--- ----------------------------
+#----------------------------
+#Table structure for core_rule_applied
+#----------------------------
 DROP TABLE IF EXISTS `core_rule_applied`;
 CREATE TABLE `core_rule_applied` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -88,9 +88,9 @@ CREATE TABLE `core_rule_applied` (
   CONSTRAINT `fk_core_rule_applied_fields_1` FOREIGN KEY (`field_id`) REFERENCES `fields` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for core_rule_template
--- ----------------------------
+#----------------------------
+#Table structure for core_rule_template
+#----------------------------
 DROP TABLE IF EXISTS `core_rule_template`;
 CREATE TABLE `core_rule_template` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -104,9 +104,9 @@ CREATE TABLE `core_rule_template` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of core_rule_template
--- ----------------------------
+#----------------------------
+#Records of core_rule_template
+#----------------------------
 BEGIN;
 INSERT INTO `core_rule_template` VALUES (1, '내외부온도차', 0, '{\"target\":\"field\",\"devices\":[{\"class\":\"sensor\",\"type\":\"temperature-sensor\",\"desc\":\"내부온도센서를 선택해주세요.\",\"inputs\":{\"key\":\"#intemp\",\"codes\":[0,1]},\"name\":\"내부온도센서\"},{\"class\":\"sensor\",\"type\":\"temperature-sensor\",\"desc\":\"외부온도센서를 선택해주세요.\",\"inputs\":{\"key\":\"#outtemp\",\"codes\":[0,1]},\"name\":\"외부온도센서\"}]}', '{\"basic\":[],\"advanced\":[{\"key\":\"priority\",\"name\":\"우선순위\",\"value\":2,\"minmax\":[0,5],\"description\":\"룰의 우선순위\"},{\"key\":\"period\",\"name\":\"기간\",\"value\":180,\"description\":\"룰의 작동주기\"}],\"timespan\":{\"id\":0,\"used\":[true]}}', '{\"trigger\":{\"type\":\"eq\",\"eq\":\"intemp0 == 0 and outtemp0 == 0\"},\"processors\":[{\"type\":\"eq\",\"eq\":\"intemp1 - outtemp1\",\"outputs\":[\"#inoutdiff\"]}]}', '{\"data\":[{\"name\":\"내외부온도차\",\"outputs\":\"#inoutdiff\",\"outcode\":21,\"unit\":\"℃\"}]}', '주요지표');
 INSERT INTO `core_rule_template` VALUES (2, '난방부하', 0, '{\"target\":\"field\",\"devices\":[{\"class\":\"sensor\",\"type\":\"temperature-sensor\",\"desc\":\"내부온도센서를 선택해주세요.\",\"inputs\":{\"key\":\"#intemp\",\"codes\":[0,1]},\"name\":\"내부온도센서\"}],\"data\":[{\"key\":\"#inoutdiff\",\"name\":\"내외부온도차\",\"desc\":\"내외부온도차를 선택해주세요.\",\"idfmt\":\"3[0-9][0-9][0-9][0-9][0-9]21\"}]}', '{\"basic\":[{\"key\":\"#KpH\",\"name\":\"난방온도비례상수\",\"value\":[-5,-5,-5,-5,-5,-5],\"type\":\"ts_float\",\"description\":\"난방온도에 대한 비례상수\"},{\"key\":\"#KdH\",\"name\":\"난방온도미분상수\",\"value\":[-3,-3,-3,-3,-3,-3],\"type\":\"ts_float\",\"description\":\"난방온도에 대한 미분상수\"},{\"key\":\"#KpO\",\"name\":\"내외부온도차비례상수\",\"value\":[-1,-1,-1,-1,-1,-1],\"type\":\"ts_float\",\"description\":\"내외부온도차에 대한 비례상수\"}],\"advanced\":[{\"key\":\"priority\",\"name\":\"우선순위\",\"value\":3,\"minmax\":[0,5],\"description\":\"룰의 우선순위\"},{\"key\":\"period\",\"name\":\"기간\",\"value\":60,\"description\":\"룰의 작동주기\"}],\"timespan\":{\"id\":1,\"used\":[true,true,true,true,true,true]}}', '{\"trigger\":{\"type\":\"eq\",\"eq\":\"intemp0 == 0\"},\"processors\":[{\"type\":\"mod\",\"mod\":\"welgro.heatload\",\"outputs\":[\"#heatload\"]}]}', '{\"data\":[{\"name\":\"난방부하\",\"outputs\":\"#heatload\",\"outcode\":25}]}', '특수지표');
@@ -127,9 +127,9 @@ INSERT INTO `core_rule_template` VALUES (19, '보온커튼제어', 0, '{\"target
 INSERT INTO `core_rule_template` VALUES (20, '이슬점추정', 0, '{\"target\":\"field\",\"devices\":[{\"class\":\"sensor\",\"type\":\"temperature-sensor\",\"desc\":\"내부온도센서를 선택해주세요.\",\"inputs\":{\"key\":\"#intemp\",\"codes\":[0,1]},\"name\":\"내부온도센서\"},{\"class\":\"sensor\",\"type\":\"humidity-sensor\",\"desc\":\"내부습도센서를 선택해주세요.\",\"inputs\":{\"key\":\"#inhum\",\"codes\":[0,1]},\"name\":\"내부습도센서\"}]}', '{\"basic\":[],\"advanced\":[{\"key\":\"priority\",\"name\":\"우선순위\",\"value\":2,\"minmax\":[0,5],\"description\":\"룰의 우선순위\"},{\"key\":\"period\",\"name\":\"기간\",\"value\":60,\"description\":\"룰의 작동주기\"}],\"timespan\":{\"id\":0,\"used\":[true]}}', '{\"trigger\":{\"type\":\"eq\",\"eq\":\"intemp0 == 0 and inhum0 == 0\"},\"processors\":[{\"type\":\"eq\",\"eq\":\"(243.12 * (17.62 * intemp1 /(243.12 + intemp1) + log(inhum1 / 100.0))) / (17.62 - (17.62 * intemp1 /(243.12 + intemp1)) + log(inhum1 / 100.0))\",\"outputs\":[\"#dewpoint\"]}]}', '{\"data\":[{\"name\":\"이슬점\",\"outputs\":\"#dewpoint\",\"outcode\":35,\"unit\":\"℃\"}]}', '특수지표');
 COMMIT;
 
--- ----------------------------
--- Table structure for core_timespan
--- ----------------------------
+#----------------------------
+#Table structure for core_timespan
+#----------------------------
 DROP TABLE IF EXISTS `core_timespan`;
 CREATE TABLE `core_timespan` (
   `id` int(11) NOT NULL,
@@ -140,9 +140,9 @@ CREATE TABLE `core_timespan` (
   PRIMARY KEY (`id`,`field_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of core_timespan
--- ----------------------------
+#----------------------------
+#Records of core_timespan
+#----------------------------
 BEGIN;
 INSERT INTO `core_timespan` VALUES (1, -1, '{\"configuration\":{\"timing\":\"sun\",\"longitude\":128.856632,\"latitude\":37.798953},\"parts\":[{\"id\":\"span-1\",\"name\":\"P-1\",\"to\":\"14400\",\"value\":\"14400\",\"type\":\"\"},{\"id\":\"span-2\",\"name\":\"P-2\",\"to\":\"rise+1000\",\"value\":\"1000\",\"type\":\"rise+\"},{\"id\":\"span-3\",\"name\":\"P-3\",\"to\":\"rise+10800\",\"value\":\"10800\",\"type\":\"rise+\"},{\"id\":\"span-4\",\"name\":\"P-4\",\"to\":\"set-10800\",\"value\":\"10800\",\"type\":\"set-\"},{\"id\":\"span-5\",\"name\":\"P-5\",\"to\":\"set+10000\",\"value\":\"10000\",\"type\":\"set+\"},{\"id\":\"span-6\",\"name\":\"P-6\",\"to\":\"86400\",\"value\":\"86400\",\"type\":\"\"}],\"data\":[],\"threshold\":[{\"id\":\"vtemp\",\"name\":\"환기온도\",\"linetype\":\"monotone\",\"unit\":\"℃\",\"timeoption\":[{\"span\":\"span-1\",\"to\":15},{\"span\":\"span-2\",\"to\":-4},{\"span\":\"span-3\",\"to\":22},{\"span\":\"span-4\",\"to\":25},{\"span\":\"span-5\",\"to\":23},{\"span\":\"span-6\",\"to\":15}]},{\"id\":\"htemp\",\"name\":\"난방온도\",\"linetype\":\"monotone\",\"unit\":\"℃\",\"timeoption\":[{\"span\":\"span-1\",\"to\":8},{\"span\":\"span-2\",\"to\":10},{\"span\":\"span-3\",\"to\":18},{\"span\":\"span-4\",\"to\":20},{\"span\":\"span-5\",\"to\":18},{\"span\":\"span-6\",\"to\":10}]}]}', '시간대별 환기/난방온도기준', '2019-09-06 16:22:59');
 INSERT INTO `core_timespan` VALUES (1, 0, '{\"configuration\":{\"timing\":\"sun\",\"longitude\":128.856632,\"latitude\":37.798953},\"parts\":[{\"id\":\"span-1\",\"name\":\"P-1\",\"to\":\"14400\",\"value\":\"14400\",\"type\":\"\"},{\"id\":\"span-2\",\"name\":\"P-2\",\"to\":\"rise+1000\",\"value\":\"1000\",\"type\":\"rise+\"},{\"id\":\"span-3\",\"name\":\"P-3\",\"to\":\"rise+10800\",\"value\":\"10800\",\"type\":\"rise+\"},{\"id\":\"span-4\",\"name\":\"P-4\",\"to\":\"set-10800\",\"value\":\"10800\",\"type\":\"set-\"},{\"id\":\"span-5\",\"name\":\"P-5\",\"to\":\"set+10000\",\"value\":\"10000\",\"type\":\"set+\"},{\"id\":\"span-6\",\"name\":\"P-6\",\"to\":\"86400\",\"value\":\"86400\",\"type\":\"\"}],\"data\":[],\"threshold\":[{\"id\":\"vtemp\",\"name\":\"환기온도\",\"linetype\":\"monotone\",\"unit\":\"℃\",\"timeoption\":[{\"span\":\"span-1\",\"to\":15},{\"span\":\"span-2\",\"to\":-4},{\"span\":\"span-3\",\"to\":22},{\"span\":\"span-4\",\"to\":25},{\"span\":\"span-5\",\"to\":23},{\"span\":\"span-6\",\"to\":15}]},{\"id\":\"htemp\",\"name\":\"난방온도\",\"linetype\":\"monotone\",\"unit\":\"℃\",\"timeoption\":[{\"span\":\"span-1\",\"to\":8},{\"span\":\"span-2\",\"to\":10},{\"span\":\"span-3\",\"to\":18},{\"span\":\"span-4\",\"to\":20},{\"span\":\"span-5\",\"to\":18},{\"span\":\"span-6\",\"to\":10}]}]}', '시간대별 환기/난방온도기준', '2019-09-06 16:22:59');
@@ -151,9 +151,9 @@ INSERT INTO `core_timespan` VALUES (2, 0, '{\"configuration\":{\"timing\":\"sun\
 COMMIT;
 
 
--- ----------------------------
--- Table structure for dataindexes
--- ----------------------------
+#----------------------------
+#Table structure for dataindexes
+#----------------------------
 DROP TABLE IF EXISTS `dataindexes`;
 CREATE TABLE `dataindexes` (
   `id` int(11) NOT NULL,
@@ -167,17 +167,17 @@ CREATE TABLE `dataindexes` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of dataindexes
--- ----------------------------
+#----------------------------
+#Records of dataindexes
+#----------------------------
 BEGIN;
 INSERT INTO `dataindexes` VALUES (1, NULL, '위도', '', 0, NULL, 0, 0);
 INSERT INTO `dataindexes` VALUES (2, NULL, '경도', '', 0, NULL, 0, 0);
 COMMIT;
 
--- ----------------------------
--- Table structure for current_observations
--- ----------------------------
+#----------------------------
+#Table structure for current_observations
+#----------------------------
 DROP TABLE IF EXISTS `current_observations`;
 CREATE TABLE `current_observations` (
   `data_id` int(11) NOT NULL,
@@ -188,17 +188,17 @@ CREATE TABLE `current_observations` (
   CONSTRAINT `fk_current_observations_dataindexes` FOREIGN KEY (`data_id`) REFERENCES `dataindexes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of current_observations
--- ----------------------------
+#----------------------------
+#Records of current_observations
+#----------------------------
 BEGIN;
 INSERT INTO `current_observations` VALUES (1, '2019-08-22 16:39:11', 37.7091842052891, '2019-09-06 17:49:02');
 INSERT INTO `current_observations` VALUES (2, '2019-08-22 16:39:11', 126.448555072944, '2019-08-22 16:39:11');
 COMMIT;
 
--- ----------------------------
--- Table structure for devices
--- ----------------------------
+#----------------------------
+#Table structure for devices
+#----------------------------
 DROP TABLE IF EXISTS `devices`;
 CREATE TABLE `devices` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -215,9 +215,9 @@ CREATE TABLE `devices` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for device_field
--- ----------------------------
+#----------------------------
+#Table structure for device_field
+#----------------------------
 DROP TABLE IF EXISTS `device_field`;
 CREATE TABLE `device_field` (
   `device_id` int(11) NOT NULL,
@@ -230,9 +230,9 @@ CREATE TABLE `device_field` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- ----------------------------
--- Table structure for farmos_user
--- ----------------------------
+#----------------------------
+#Table structure for farmos_user
+#----------------------------
 DROP TABLE IF EXISTS `farmos_user`;
 CREATE TABLE `farmos_user` (
   `userid` varchar(50) NOT NULL,
@@ -245,17 +245,17 @@ CREATE TABLE `farmos_user` (
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of farmos_user
--- ----------------------------
+#----------------------------
+#Records of farmos_user
+#----------------------------
 BEGIN;
 INSERT INTO `farmos_user` VALUES ('farmos', PASSWORD('farmosv2@'), 'user', '{\"name\" :\"관리자\"}', NULL, NULL, '2019-09-02 15:36:00');
 COMMIT;
 
 
--- ----------------------------
--- Table structure for gate_info
--- ----------------------------
+#----------------------------
+#Table structure for gate_info
+#----------------------------
 DROP TABLE IF EXISTS `gate_info`;
 CREATE TABLE `gate_info` (
   `uuid` varchar(255) NOT NULL,
@@ -264,16 +264,16 @@ CREATE TABLE `gate_info` (
   PRIMARY KEY (`uuid`,`couple`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of gate_info
--- ----------------------------
+#----------------------------
+#Records of gate_info
+#----------------------------
 BEGIN;
 INSERT INTO `gate_info` VALUES ('c315cb82-0f6c-4ed6-b8cc-b00331789494', '4157859e-df55-48e5-b3ac-8e6288f2165e', '{}');
 COMMIT;
 
--- ----------------------------
--- Table structure for observations
--- ----------------------------
+#----------------------------
+#Table structure for observations
+#----------------------------
 DROP TABLE IF EXISTS `observations`;
 CREATE TABLE `observations` (
   `data_id` int(11) NOT NULL,
@@ -283,9 +283,9 @@ CREATE TABLE `observations` (
   CONSTRAINT `fk_observations_dataindexes_1` FOREIGN KEY (`data_id`) REFERENCES `dataindexes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for requests
--- ----------------------------
+#----------------------------
+#Table structure for requests
+#----------------------------
 DROP TABLE IF EXISTS `requests`;
 CREATE TABLE `requests` (
   `opid` int(11) NOT NULL,
