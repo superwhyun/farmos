@@ -127,11 +127,10 @@ class CoupleManager(Runner):
         self.stopold()
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage : python couplemanager.py [start|stop|restart|run]")
-        sys.exit(2)
-
-    mode = sys.argv[1]
+    # if len(sys.argv) != 2:
+    #     print("Usage : python couplemanager.py [start|stop|restart|run]")
+    #     sys.exit(2)
+    # mode = sys.argv[1]
     runner = CoupleManager('../conf/cpmng.conf', util.getdefaultlogger())
     runner.initialize()
     runner.run()

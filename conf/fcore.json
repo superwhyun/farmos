@@ -1,12 +1,12 @@
 {
   "db": {
-    "host": "localhost",
+    "host": "farmos-mysql",
     "user": "farmos",
     "password": "farmosv2@",
     "db": "farmos"
   },
   "mqtt": {
-    "host": "localhost",
+    "host": "farmos-mosquitto",
     "port": 1883,
     "keepalive": 60,
     "svc" : "cvtgate"

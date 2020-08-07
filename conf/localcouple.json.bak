@@ -10,13 +10,13 @@
 				"class": "FarmosMate",
 				"opt": {
                     "db": {
-                        "host": "farmos-mysql",
+                        "host": "localhost",
                         "user": "farmos",
                         "password": "farmosv2@",
                         "db": "farmos"
                     },
                     "conn": {
-                        "host": "farmos-mosquitto",
+                        "host": "localhost",
 						"port": 1883,
 						"keepalive": 60
 					},

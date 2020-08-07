@@ -1,0 +1,11 @@
+FROM node:lts
+WORKDIR /usr/src/app
+COPY ./server ./server
+COPY ./ui ./ui
+
+# RUN npm install forever -g
+RUN npm --prefix ./server/modules/database.js install ./server/modules/database.js
+RUN npm --prefix ./server/api install ./server/api
+
+ENTRYPOINT ["node", "./server/api/app.js"]
+

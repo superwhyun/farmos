@@ -919,6 +919,10 @@ var farmos_api = function () {
         _query += "where userid = '" + userid;
         _query += "' and passwd = password('" + passwd + "')";
 
+	console.log(_query);
+
+
+
         const [rows] = await _pool.query(_query);
         return rows
     };

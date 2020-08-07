@@ -1,0 +1,7 @@
+FROM python:3
+WORKDIR /usr/src/app
+COPY ./gate ./gate
+WORKDIR /usr/src/app/gate
+RUN pip install --no-cache-dir -r requirements.txt
+ENTRYPOINT ["python", "couplemng.py", "start"]
+

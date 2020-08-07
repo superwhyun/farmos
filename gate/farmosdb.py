@@ -216,7 +216,7 @@ class FarmosDB:
         return True
 
 if __name__ == "__main__":
-    option = {"conn" : {"host" : "localhost", "user" : "root", "password" : "pass", "db" : "db"}}
+    option = {"conn" : {"host" : "farmos-mysql", "user" : "root", "password" : "pass", "db" : "db"}}
     devinfo = [{"id" : "2", "dk" : "1", "dt": "gw", "children" : [ 
       {"id" : "3", "dk" : "1", "dt": "nd", "children" : [
         {"id" : "4", "dk" : "0", "dt": "sen"},

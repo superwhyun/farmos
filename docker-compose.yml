@@ -1,7 +1,8 @@
 version: "3.8"
 services:
-    mysql:
-        image: mysql:8.0
+    svc_mysql:
+        image: mysql:5.7
+        container_name: farmos-mysql
         restart: always
         environment: 
             MYSQL_DATABASE: 'db'
@@ -12,21 +13,72 @@ services:
             - '3306:3306'
         expose: 
             - '3306'
+        networks:
+            - backend
         cap_add: 
             - SYS_NICE  # make silent on 'mbind: Operation not permitted'
         volumes:
             - db_volume:/var/lib/mysql
-            - ./conf/sql:/docker-entrypoint-initdb.d
+            - ./conf/sql/:/docker-entrypoint-initdb.d/
+            # - ./conf/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+        # command:
+        #     - /docker-entrypoint-initdb.d/initdb.sh
 
-    mosquitto:
+
+    svc_mosquitto:
         image: eclipse-mosquitto:1.6.10
+        container_name: farmos-mosquitto
         restart: always
         ports:
             - '1883:1883'        
         expose: 
-            - '1883'            
+            - '1883'  
+        networks:
+            - backend          
         volumes:
             - ./conf/mosquitto.conf:/mosquitto/config/mosquitto.conf
+            
+    svc_fgate:
+        image: fgate:1.0
+        container_name: farmos-fagte
+        restart: always        
+        networks:
+            - backend
+        privileged: true
+        volumes: 
+            - ./conf:/usr/src/app/conf  
+            - /dev:/dev  
+        # devices:
+        #     - "/dev/ttyUSB0:/dev/ttyUSB0"
+        environment:
+            - UDEV=1
+        devices:
+            - '/dev:/dev'            
+
+
+    svc_fcore:
+        image: "fcore:1.0"
+        container_name: farmos-fcore
+        restart: always         
+        networks:
+            - backend
+        volumes: 
+            - ./conf:/usr/src/app/conf      
+            
+            
+    svc_fui:
+        image: fui:1.0
+        container_name: farmos-fui
+        restart: always
+        ports:
+            - '8081:8081'        
+        expose: 
+            - '8081'            
+        networks:
+            - frontend
+            - backend
+        volumes: 
+            - ./conf:/usr/src/app/conf
 
 volumes: 
     db_volume:
