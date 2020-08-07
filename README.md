@@ -18,11 +18,11 @@ Modifications are as follows:
 - Docker Automation
     - docker-compose.yml
 - Tested 
-    [x] Raspberry PI 3
+    - [x] Raspberry PI 3
         - OS : Raspberry Pi OS (Debian Buster)
-    [ ] Beagle Bone Black
+    - [ ] Beagle Bone Black
         - OS : Debian
-    [ ] Jetson Nano
+    - [ ] Jetson Nano
         - OS : ubuntu (Jetson)
  
 
